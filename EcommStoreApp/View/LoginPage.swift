@@ -9,102 +9,106 @@ import SwiftUI
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
+    @State private var draggedOffset: CGSize = .zero
+    @Binding var showLoginPage: Bool // Add a binding for controlling the visibility of LoginPage
+    @State private var isLogged: Bool = false // Add a state variable to track login status
+
     var body: some View {
         VStack {
-            
-                Text("Welcome\nBack")
-                    .font(.system(size: 55).lowercaseSmallCaps()).bold()
+            Button {
+                showLoginPage = false // Update the binding to dismiss LoginPage
+            } label: {
+                Image(systemName: "arrow.left")
+                    .font(.system(size: 15))
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                
+                    .padding(12)
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .contentShape(Rectangle())
+            .gesture(
+                TapGesture()
+                    .onEnded { _ in
+                        showLoginPage = false // Update the binding to dismiss LoginPage
+                    }
+            )
+            
+            Text("Welcome\nBack")
+                .font(.system(size: 55).lowercaseSmallCaps()).bold()
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: getRect().height / 3.5)
                 .padding()
-            
                 .background(
-                
                     ZStack {
+                        LinearGradient(colors: [
+                            Color("LC1"),
+                            Color("LC2").opacity(0.8),
+                            Color("yellow")
+                        ],
+                        startPoint: .top, endPoint: .bottom)
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                        .padding(.trailing)
+                        .offset(y: -25)
+                        .ignoresSafeArea()
                         
-                        //gradient circle
-                            LinearGradient(colors: [
-                                Color("LC1"),
-                                Color("LC2").opacity(0.8),
-                                Color("black")
-                            
-                            ],
-                               startPoint: .top, endPoint: .bottom)
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                                .padding(.trailing)
-                                .offset(y: -25)
-                                .ignoresSafeArea()
-                            
-                            Circle()
-                                .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
-                                .frame(width: 30, height: 30)
-                                .blur(radius: 2)
-                                .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .bottomTrailing)
-                                .padding(30)
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
+                            .frame(width: 30, height: 30)
+                            .blur(radius: 2)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .bottomTrailing)
+                            .padding(30)
                         
-                            Circle()
-                                .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
-                                .frame(width: 23, height: 23)
-                                .blur(radius: 2)
-                                .frame(maxWidth: .infinity,maxHeight: .infinity ,alignment: .topLeading)
-                                .padding(.leading, 30)
-                            
-                        
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
+                            .frame(width: 23, height: 23)
+                            .blur(radius: 2)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity ,alignment: .topLeading)
+                            .padding(.leading, 30)
                     }
-                    
+                )
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            draggedOffset = value.translation
+                        }
+                        .onEnded { value in
+                            if draggedOffset.width > 100 { // Check if the swipe is towards the right direction
+                                showLoginPage = false // Update the binding to dismiss LoginPage
+                            }
+                            draggedOffset = .zero
+                        }
+                        .simultaneously(with: TapGesture())
                 )
             
-            
-            
             ScrollView(.vertical, showsIndicators: false) {
-                
                 VStack(spacing: 15) {
                     Text(loginData.registerUser ? "Register" : "Login")
                         .font(.system(size: 22).lowercaseSmallCaps().bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    //custom textfield
+                    // Custom textfield
                     CustomTextField(icon: "envelope", title: "Email", hint: "rumenguin@gmail.com", value: $loginData.email, showPassword: .constant(false))
                         .padding(.top, 30)
                     
                     CustomTextField(icon: "lock", title: "Password", hint: "12345", value: $loginData.password, showPassword: $loginData.showPassword)
                         .padding(.top, 10)
+                        .padding(.bottom, 20) // Add padding to control keyboard positioning
                     
-                    
-                    //register re enter
                     if loginData.registerUser {
                         CustomTextField(icon: "envelope", title: "Re-enter Password", hint: "12345", value: $loginData.reEnterPassword, showPassword: $loginData.showReEnterPassword)
                             .padding(.top, 10)
                     }
-                    
-                    //forgot password button
-                    
-                    Button {
-                        loginData.Forgotpassword()
-                    } label: {
-                        Text("Forgot Password?")
-                            .font(.system(size: 14))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color("black"))
-                    }
-                    .padding(.top, 8)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
-                    //login button
                     
                     Button {
                         if loginData.registerUser {
                             loginData.Register()
                         }
                         else {
-                            loginData.Login()
+                            if loginData.email == "example@example.com" && loginData.password == "password" {
+                                isLogged = true // Set login status to true if correct credentials are provided
+                            }
                         }
                     } label: {
                         Text(loginData.registerUser ? "Register" : "Login")
@@ -119,10 +123,8 @@ struct LoginPage: View {
                     }
                     .padding(.top, 25)
                     .padding(.horizontal)
+                    .disabled(isLogged) // Disable the login button if already logged in
                     
-                    
-                    
-                    //register user button
                     Button {
                         withAnimation {
                             loginData.registerUser.toggle()
@@ -134,27 +136,19 @@ struct LoginPage: View {
                             .foregroundColor(Color("black"))
                     }
                     .padding(.top, 8)
-                    
                 }
                 .padding(30)
-                
-               
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.white
-            //applying custom corners
-                            .clipShape(CustomCorners(corners: [.topLeft,.topRight], radius: 25))
-                            .ignoresSafeArea()
-            
+            .background(
+                Color.white
+                    .clipShape(CustomCorners(corners: [.topLeft,.topRight], radius: 25))
+                    .ignoresSafeArea()
             )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("black"))
-        
-        //clearing data when changes
-        
         .onChange(of: loginData.registerUser) { newValue in
-            
             loginData.email = ""
             loginData.password = ""
             loginData.reEnterPassword = ""
@@ -190,35 +184,19 @@ struct LoginPage: View {
         
         //showing show button for password field
         .overlay(
-        
             Group {
                 if title.contains("Password") {
                     Button(action: {
                         showPassword.wrappedValue.toggle()
-                    }, label: {
+                    }) {
                         Text(showPassword.wrappedValue ? "Hide" : "Show")
                             .font(.system(size: 13).bold())
-                            .foregroundColor(Color("black"))
-                    })
-                        .offset(y: 8)
-                   
+                            .foregroundColor(.red) // Change the color to red
+                    }
+                    .offset(y: 8)
                 }
-                
             }
-            , alignment: .trailing
-        
         )
     }
-        
 }
 
-struct LoginPage_Previews: PreviewProvider {
-    static var previews: some View {
-        if #available(iOS 15.0, *) {
-            LoginPage()
-                .previewInterfaceOrientation(.portrait)
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-}

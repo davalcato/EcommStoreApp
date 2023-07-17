@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct OnBoardingPage: View {
-    //showing login page
+    @StateObject var loginData: LoginPageModel = LoginPageModel()
     @State var showLoginPage: Bool = false
+    
     var body: some View {
-            
         VStack(alignment: .leading) {
-            
             Text("Find your\nGadget")
                 .font(.system(size: 55))
                 .fontWeight(.bold)
@@ -23,13 +22,11 @@ struct OnBoardingPage: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
             
-            
             Button {
-                withAnimation{
+                withAnimation {
                     showLoginPage = true
                 }
             } label: {
-                
                 Text("Get Started")
                     .font(.system(size: 18).lowercaseSmallCaps())
                     .fontWeight(.semibold)
@@ -43,7 +40,7 @@ struct OnBoardingPage: View {
             .padding(.horizontal, 30)
             .offset(y: getRect().height < 750 ? 20 : 40)
             
-          Spacer()
+            Spacer()
             
         }
         .padding()
@@ -51,31 +48,27 @@ struct OnBoardingPage: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Color.white
-          
         )
         .overlay(
-        
             Group{
                 if showLoginPage {
-                    LoginPage()
+                    LoginPage(loginData: loginData, showLoginPage: $showLoginPage) // Pass the LoginPageModel and the binding variable
                         .transition(.move(edge: .bottom))
+                        .zIndex(1) // Ensure the LoginPage is above the OnBoardingPage
                 }
-            })
-       
+            }
+        )
     }
 }
 
 struct OnBoardingPage_Previews: PreviewProvider {
     static var previews: some View {
-       OnBoardingPage()
-//            .previewDevice("iPhone 13 pro")
-//        OnBoardingPage()
-//            .previewDevice("iPhone 8")
+        OnBoardingPage()
     }
 }
 
-//extending view
-extension View{
+// Extending view
+extension View {
     func getRect()-> CGRect {
         return UIScreen.main.bounds
     }
