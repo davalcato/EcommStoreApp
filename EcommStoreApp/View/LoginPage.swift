@@ -31,7 +31,7 @@ struct LoginPage: View {
                         showLoginPage = false // Update the binding to dismiss LoginPage
                     }
             )
-            
+
             Text("Welcome\nBack")
                 .font(.system(size: 55).lowercaseSmallCaps()).bold()
                 .foregroundColor(.white)
@@ -43,7 +43,7 @@ struct LoginPage: View {
                         LinearGradient(colors: [
                             Color("LC1"),
                             Color("LC2").opacity(0.8),
-                            Color("yellow")
+                            Color("red")
                         ],
                         startPoint: .top, endPoint: .bottom)
                         .frame(width: 100, height: 100)
@@ -52,14 +52,14 @@ struct LoginPage: View {
                         .padding(.trailing)
                         .offset(y: -25)
                         .ignoresSafeArea()
-                        
+
                         Circle()
                             .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
                             .frame(width: 30, height: 30)
                             .blur(radius: 2)
                             .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .bottomTrailing)
                             .padding(30)
-                        
+
                         Circle()
                             .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
                             .frame(width: 23, height: 23)
@@ -81,36 +81,37 @@ struct LoginPage: View {
                         }
                         .simultaneously(with: TapGesture())
                 )
-            
+
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 15) {
                     Text(loginData.registerUser ? "Register" : "Login")
                         .font(.system(size: 22).lowercaseSmallCaps().bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     // Custom textfield
                     CustomTextField(icon: "envelope", title: "Email", hint: "rumenguin@gmail.com", value: $loginData.email, showPassword: .constant(false))
                         .padding(.top, 30)
-                    
+
                     CustomTextField(icon: "lock", title: "Password", hint: "12345", value: $loginData.password, showPassword: $loginData.showPassword)
                         .padding(.top, 10)
                         .padding(.bottom, 20) // Add padding to control keyboard positioning
-                    
+
                     if loginData.registerUser {
                         CustomTextField(icon: "envelope", title: "Re-enter Password", hint: "12345", value: $loginData.reEnterPassword, showPassword: $loginData.showReEnterPassword)
                             .padding(.top, 10)
                     }
-                    
-                    Button {
+
+                    Button(action: {
                         if loginData.registerUser {
-                            loginData.Register()
-                        }
-                        else {
-                            if loginData.email == "example@example.com" && loginData.password == "password" {
+                            if loginData.registerUserValid() {
+                                loginData.Register()
+                            }
+                        } else {
+                            if loginData.loginUserValid() {
                                 isLogged = true // Set login status to true if correct credentials are provided
                             }
                         }
-                    } label: {
+                    }) {
                         Text(loginData.registerUser ? "Register" : "Login")
                             .font(.system(size: 17).lowercaseSmallCaps())
                             .fontWeight(.bold)
@@ -124,7 +125,7 @@ struct LoginPage: View {
                     .padding(.top, 25)
                     .padding(.horizontal)
                     .disabled(isLogged) // Disable the login button if already logged in
-                    
+
                     Button {
                         withAnimation {
                             loginData.registerUser.toggle()
@@ -142,7 +143,7 @@ struct LoginPage: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 Color.white
-                    .clipShape(CustomCorners(corners: [.topLeft,.topRight], radius: 25))
+                    .clipShape(CustomCorners(corners: [.topLeft, .topRight], radius: 25))
                     .ignoresSafeArea()
             )
         }
@@ -156,12 +157,10 @@ struct LoginPage: View {
             loginData.showReEnterPassword = false
         }
     }
-    
+
     @ViewBuilder
     func CustomTextField(icon: String, title: String, hint: String, value: Binding<String>, showPassword: Binding<Bool>) -> some View {
-        
         VStack(alignment: .leading, spacing: 12) {
-            
             Label {
                 Text(title)
                     .font(.system(size: 14))
@@ -169,7 +168,7 @@ struct LoginPage: View {
                 Image(systemName: icon)
             }
             .foregroundColor(Color.black.opacity(0.8))
-            
+
             if title.contains("Password") && !showPassword.wrappedValue {
                 SecureField(hint, text: value)
                     .padding(.top, 2)
@@ -177,22 +176,20 @@ struct LoginPage: View {
                 TextField(hint, text: value)
                     .padding(.top,2)
             }
-            
+
             Divider()
                 .background(Color.black.opacity(0.4))
         }
-        
-        //showing show button for password field
         .overlay(
             Group {
                 if title.contains("Password") {
                     Button(action: {
                         showPassword.wrappedValue.toggle()
-                    }) {
+                    }, label: {
                         Text(showPassword.wrappedValue ? "Hide" : "Show")
                             .font(.system(size: 13).bold())
-                            .foregroundColor(.red) // Change the color to red
-                    }
+                            .foregroundColor(.red)
+                    })
                     .offset(y: 8)
                 }
             }
