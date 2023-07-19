@@ -22,64 +22,38 @@ class LoginPageModel: ObservableObject {
     @AppStorage("log_Status") var log_Status: Bool = false
 
     // Login call
-    func loginUserValid() -> Bool {
-        // Add your login validation logic here
-        // Return true if the login data is valid, false otherwise
-        // For example:
+    func Login(completion: @escaping (Bool) -> Void) {
+        // Add your login logic here
         if email == "example@example.com" && password == "password" {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    func registerUserValid() -> Bool {
-        // Add your registration validation logic here
-        // Return true if the registration data is valid, false otherwise
-        // For example:
-        if email.isValidEmail() && password.count >= 6 && password == reEnterPassword {
-            return true
-        } else {
-            return false
-        }
-    }
-
-    func Login() {
-        if loginUserValid() {
             withAnimation {
                 log_Status = true
+                completion(true)
             }
         } else {
             // Handle incorrect credentials
             // For example, display an error message
+            completion(false)
         }
     }
 
-    func Register() {
-        if registerUserValid() {
-            // Add your registration logic here
-            // You can store the registered user's information in a database or perform other actions
-            withAnimation {
-                log_Status = true
-            }
-        } else {
-            // Handle invalid registration data
-            // For example, display an error message
+    func Register(completion: @escaping (Bool) -> Void) {
+        // Add your registration logic here
+        // You can store the registered user's information in a database or perform other actions
+        withAnimation {
+            log_Status = true
+            completion(true)
         }
     }
 
-    func Forgotpassword() {
-        // Add your forgot password logic here
+    func loginUserValid() -> Bool {
+        // Add your login validation logic here
+        // For example, check if the email and password meet the required criteria
+        return !email.isEmpty && !password.isEmpty
     }
-}
 
-extension String {
-    func isValidEmail() -> Bool {
-        // Add your email validation logic here
-        // Return true if the email is valid, false otherwise
-        // For example, you can use regular expressions to validate the email format
-        let emailRegex = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: self)
+    func registerUserValid() -> Bool {
+        // Add your registration validation logic here
+        // For example, check if the email, password, and re-entered password meet the required criteria
+        return !email.isEmpty && !password.isEmpty && password == reEnterPassword
     }
 }

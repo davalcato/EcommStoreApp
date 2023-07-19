@@ -12,6 +12,7 @@ struct LoginPage: View {
     @State private var draggedOffset: CGSize = .zero
     @Binding var showLoginPage: Bool // Add a binding for controlling the visibility of LoginPage
     @State private var isLogged: Bool = false // Add a state variable to track login status
+    @State private var navigateToMainPage: Bool = false // Add a state variable to control navigation to the MainPage
 
     var body: some View {
         VStack {
@@ -101,17 +102,38 @@ struct LoginPage: View {
                             .padding(.top, 10)
                     }
 
-                    Button(action: {
+                    Button {
                         if loginData.registerUser {
                             if loginData.registerUserValid() {
-                                loginData.Register()
+                                loginData.Register { success in
+                                    if success {
+                                        // Handle registration success here
+                                        // For example, navigate to the MainPage
+                                        isLogged = true
+                                        navigateToMainPage = true
+                                    } else {
+                                        // Handle registration failure here
+                                        // For example, display an error message
+                                    }
+                                }
                             }
                         } else {
                             if loginData.loginUserValid() {
-                                isLogged = true // Set login status to true if correct credentials are provided
+                                loginData.Login { success in
+                                    if success {
+                                        // Set login status to true if correct credentials are provided
+                                        isLogged = true
+                                        // Handle login success here
+                                        // For example, navigate to the MainPage
+                                        navigateToMainPage = true
+                                    } else {
+                                        // Handle login failure here
+                                        // For example, display an error message
+                                    }
+                                }
                             }
                         }
-                    }) {
+                    } label: {
                         Text(loginData.registerUser ? "Register" : "Login")
                             .font(.system(size: 17).lowercaseSmallCaps())
                             .fontWeight(.bold)
@@ -155,6 +177,9 @@ struct LoginPage: View {
             loginData.reEnterPassword = ""
             loginData.showPassword = false
             loginData.showReEnterPassword = false
+        }
+        .fullScreenCover(isPresented: $navigateToMainPage) {
+            MainPage()
         }
     }
 
