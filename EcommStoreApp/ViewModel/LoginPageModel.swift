@@ -6,54 +6,60 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 class LoginPageModel: ObservableObject {
-    // Login properties
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var showPassword: Bool = false
 
-    // Register properties
     @Published var registerUser: Bool = false
     @Published var reEnterPassword: String = ""
     @Published var showReEnterPassword: Bool = false
+    @Published var errorMessage: String = ""
 
     // Log Status
-    @AppStorage("log_Status") var log_Status: Bool = false
+    @AppStorage("log_Status") var logStatus: Bool = false
 
-    // Login call
-    func Login(completion: @escaping (Bool) -> Void) {
-        // Add your login logic here
-        if email == "example@example.com" && password == "password" {
-            withAnimation {
-                log_Status = true
-                completion(true)
-            }
+    // Keychain
+    let keychain = KeychainSwift()
+
+    func login() {
+        // Check if the user's input matches the stored account information
+        if let savedEmail = keychain.get("email"),
+           let savedPassword = keychain.get("password"),
+           email == savedEmail,
+           password == savedPassword {
+            logStatus = true
         } else {
             // Handle incorrect credentials
             // For example, display an error message
-            completion(false)
+            errorMessage = "Incorrect email or password. Please try again."
         }
     }
 
-    func Register(completion: @escaping (Bool) -> Void) {
+    func register(completion: @escaping (Bool) -> Void) {
         // Add your registration logic here
-        // You can store the registered user's information in a database or perform other actions
-        withAnimation {
-            log_Status = true
-            completion(true)
-        }
-    }
+        // You can store the registered user's information in the Keychain
+        keychain.set(email, forKey: "email")
+        keychain.set(password, forKey: "password")
+        logStatus = true
 
-    func loginUserValid() -> Bool {
-        // Add your login validation logic here
-        // For example, check if the email and password meet the required criteria
-        return !email.isEmpty && !password.isEmpty
+        // Call completion with success
+        completion(true)
     }
 
     func registerUserValid() -> Bool {
-        // Add your registration validation logic here
-        // For example, check if the email, password, and re-entered password meet the required criteria
-        return !email.isEmpty && !password.isEmpty && password == reEnterPassword
+        // Add validation logic for registration here
+        // For example, check if email and password are valid
+        // For this example, we'll assume they are valid
+        return true
+    }
+
+    func loginUserValid() -> Bool {
+        // Add validation logic for login here
+        // For example, check if email and password are not empty
+        // For this example, we'll assume they are valid
+        return !email.isEmpty && !password.isEmpty
     }
 }

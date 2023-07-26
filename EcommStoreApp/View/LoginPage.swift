@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
     @State private var draggedOffset: CGSize = .zero
-    @Binding var showLoginPage: Bool // Add a binding for controlling the visibility of LoginPage
-    @State private var isLogged: Bool = false // Add a state variable to track login status
-    @State private var navigateToMainPage: Bool = false // Add a state variable to control navigation to the MainPage
+    @Binding var showLoginPage: Bool
+    @State private var navigateToMainPage: Bool = false
 
     var body: some View {
         VStack {
             Button {
-                showLoginPage = false // Update the binding to dismiss LoginPage
+                showLoginPage = false
             } label: {
                 Image(systemName: "arrow.left")
                     .font(.system(size: 15))
@@ -29,9 +29,13 @@ struct LoginPage: View {
             .gesture(
                 TapGesture()
                     .onEnded { _ in
-                        showLoginPage = false // Update the binding to dismiss LoginPage
+                        showLoginPage = false
                     }
             )
+            
+            Text(loginData.errorMessage)
+                .foregroundColor(.red)
+                .padding(.top, 10)
 
             Text("Welcome\nBack")
                 .font(.system(size: 55).lowercaseSmallCaps()).bold()
@@ -75,8 +79,8 @@ struct LoginPage: View {
                             draggedOffset = value.translation
                         }
                         .onEnded { value in
-                            if draggedOffset.width > 100 { // Check if the swipe is towards the right direction
-                                showLoginPage = false // Update the binding to dismiss LoginPage
+                            if draggedOffset.width > 100 {
+                                showLoginPage = false
                             }
                             draggedOffset = .zero
                         }
@@ -89,13 +93,12 @@ struct LoginPage: View {
                         .font(.system(size: 22).lowercaseSmallCaps().bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    // Custom textfield
                     CustomTextField(icon: "envelope", title: "Email", hint: "rumenguin@gmail.com", value: $loginData.email, showPassword: .constant(false))
                         .padding(.top, 30)
 
                     CustomTextField(icon: "lock", title: "Password", hint: "12345", value: $loginData.password, showPassword: $loginData.showPassword)
                         .padding(.top, 10)
-                        .padding(.bottom, 20) // Add padding to control keyboard positioning
+                        .padding(.bottom, 20)
 
                     if loginData.registerUser {
                         CustomTextField(icon: "envelope", title: "Re-enter Password", hint: "12345", value: $loginData.reEnterPassword, showPassword: $loginData.showReEnterPassword)
@@ -105,32 +108,24 @@ struct LoginPage: View {
                     Button {
                         if loginData.registerUser {
                             if loginData.registerUserValid() {
-                                loginData.Register { success in
+                                loginData.register { success in
                                     if success {
-                                        // Handle registration success here
-                                        // For example, navigate to the MainPage
-                                        isLogged = true
                                         navigateToMainPage = true
                                     } else {
-                                        // Handle registration failure here
+                                        // Handle registration failure
                                         // For example, display an error message
+                                        loginData.errorMessage = "Registration failed. Please try again."
                                     }
                                 }
                             }
                         } else {
                             if loginData.loginUserValid() {
-                                loginData.Login { success in
-                                    if success {
-                                        // Set login status to true if correct credentials are provided
-                                        isLogged = true
-                                        // Handle login success here
-                                        // For example, navigate to the MainPage
-                                        navigateToMainPage = true
-                                    } else {
-                                        // Handle login failure here
-                                        // For example, display an error message
-                                    }
-                                }
+                                loginData.login()
+                                navigateToMainPage = true
+                            } else {
+                                // Handle login failure
+                                // For example, display an error message
+                                loginData.errorMessage = "Incorrect email or password. Please try again."
                             }
                         }
                     } label: {
@@ -146,7 +141,7 @@ struct LoginPage: View {
                     }
                     .padding(.top, 25)
                     .padding(.horizontal)
-                    .disabled(isLogged) // Disable the login button if already logged in
+                    .disabled(loginData.logStatus)
 
                     Button {
                         withAnimation {
