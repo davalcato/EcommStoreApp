@@ -31,6 +31,7 @@
 		758C8B7A2A57702D00A52C66 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C8B792A57702D00A52C66 /* SearchView.swift */; };
 		758C8B7C2A57705C00A52C66 /* StaggeredGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C8B7B2A57705C00A52C66 /* StaggeredGrid.swift */; };
 		758C8B7E2A57708800A52C66 /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C8B7D2A57708800A52C66 /* ProductDetailView.swift */; };
+		75C460062A71D70A0071283F /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C460052A71D7090071283F /* Tab.swift */; };
 		9B7AEF4AA0C55DDA32982625 /* Pods_EcommStoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F2600ADBD16F43710DA9582 /* Pods_EcommStoreApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,7 @@
 		758C8B792A57702D00A52C66 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		758C8B7B2A57705C00A52C66 /* StaggeredGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaggeredGrid.swift; sourceTree = "<group>"; };
 		758C8B7D2A57708800A52C66 /* ProductDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailView.swift; sourceTree = "<group>"; };
+		75C460052A71D7090071283F /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		959BAC7230926993B9423AAB /* Pods_EcommStoreApp_EcommStoreAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EcommStoreApp_EcommStoreAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B97BA3C7063A07BC36E7E81 /* Pods-EcommStoreAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EcommStoreAppTests.debug.xcconfig"; path = "Target Support Files/Pods-EcommStoreAppTests/Pods-EcommStoreAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F2A17773E09F4EB160A1E19A /* Pods-EcommStoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EcommStoreApp.debug.xcconfig"; path = "Target Support Files/Pods-EcommStoreApp/Pods-EcommStoreApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -126,7 +128,6 @@
 				9B97BA3C7063A07BC36E7E81 /* Pods-EcommStoreAppTests.debug.xcconfig */,
 				2E369AAB9DA2ABC73BBAB591 /* Pods-EcommStoreAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -231,6 +232,7 @@
 				758C8B6B2A576E9300A52C66 /* ProfilePage.swift */,
 				758C8B6D2A576EBC00A52C66 /* LikedPage.swift */,
 				758C8B6F2A576EE700A52C66 /* CartPage.swift */,
+				75C460052A71D7090071283F /* Tab.swift */,
 			);
 			path = TabViews;
 			sourceTree = "<group>";
@@ -339,7 +341,7 @@
 			);
 			mainGroup = 758C8B272A575F0300A52C66;
 			packageReferences = (
-				75C460042A719AE70071283F /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
+				75C460042A719AE70071283F /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 758C8B312A575F0300A52C66 /* Products */;
 			projectDirPath = "";
@@ -497,6 +499,7 @@
 				758C8B742A576F5500A52C66 /* LoginPage.swift in Sources */,
 				758C8B682A576DBE00A52C66 /* HomeViewModel.swift in Sources */,
 				758C8B722A576F1B00A52C66 /* OnBoardingPage.swift in Sources */,
+				75C460062A71D70A0071283F /* Tab.swift in Sources */,
 				758C8B662A576D8A00A52C66 /* LoginPageModel.swift in Sources */,
 				758C8B642A576D5A00A52C66 /* Product.swift in Sources */,
 				758C8B7A2A57702D00A52C66 /* SearchView.swift in Sources */,
@@ -859,7 +862,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		75C460042A719AE70071283F /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
+		75C460042A719AE70071283F /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {

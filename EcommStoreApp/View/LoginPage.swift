@@ -172,6 +172,10 @@ struct LoginPage: View {
             loginData.reEnterPassword = ""
             loginData.showPassword = false
             loginData.showReEnterPassword = false
+            loginData.errorMessage = "" // Reset the errorMessage when switching between login and register
+        }
+        .onChange(of: loginData.email) { newValue in
+            loginData.errorMessage = "" // Reset the errorMessage when the email field changes
         }
         .fullScreenCover(isPresented: $navigateToMainPage) {
             MainPage()

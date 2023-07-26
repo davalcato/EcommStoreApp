@@ -100,12 +100,4 @@ struct MainPage_Previews: PreviewProvider {
     }
 }
 
-//Tab Cases
-enum Tab: String, CaseIterable {
-    
-    //Raw value must be image name in asset
-    case Home = "Home"
-    case Liked = "Liked"
-    case Profile = "Profile"
-    case Cart = "Cart"
-}
+
