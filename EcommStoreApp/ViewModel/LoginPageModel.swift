@@ -24,17 +24,19 @@ class LoginPageModel: ObservableObject {
     // Keychain
     let keychain = KeychainSwift()
 
-    func login() {
+    func login() -> Bool {
         // Check if the user's input matches the stored account information
         if let savedEmail = keychain.get("email"),
            let savedPassword = keychain.get("password"),
            email == savedEmail,
            password == savedPassword {
             logStatus = true
+            return true
         } else {
             // Handle incorrect credentials
-            // For example, display an error message
+            // For example, set an error message
             errorMessage = "Incorrect email or password. Please try again."
+            return false
         }
     }
 
