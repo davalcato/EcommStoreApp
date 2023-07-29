@@ -10,11 +10,24 @@ import KeychainSwift
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
-    @State private var draggedOffset: CGSize = .zero
-    @Binding var showLoginPage: Bool
-    @State private var navigateToMainPage: Bool = false
-    @State private var showErrorAlert: Bool = false
-    
+        @State private var draggedOffset: CGSize = .zero
+        @Binding var showLoginPage: Bool
+        @State private var navigateToMainPage: Bool = false
+        @State private var showErrorAlert: Bool = false
+
+        // Add this variable for dragging offset
+        @GestureState private var dragState = CGSize.zero
+
+    // Constants
+    private let gradientColors = [
+        Color("LC1"),
+        Color("LC2").opacity(0.8),
+        Color("red")
+    ]
+
+    private let primaryButtonTitle = "DELETE"
+    private let secondaryButtonTitle = "Cancel"
+
     var body: some View {
         VStack {
             Button {
@@ -30,14 +43,14 @@ struct LoginPage: View {
             .gesture(
                 TapGesture()
                     .onEnded { _ in
-                showLoginPage = false
-            }
+                        showLoginPage = false
+                    }
             )
-            
+
             Text(loginData.errorMessage)
                 .foregroundColor(.red)
                 .padding(.top, 10)
-            
+
             Text("Welcome\nBack")
                 .font(.system(size: 55).lowercaseSmallCaps()).bold()
                 .foregroundColor(.white)
@@ -46,66 +59,62 @@ struct LoginPage: View {
                 .padding()
                 .background(
                     ZStack {
-                    LinearGradient(colors: [
-                        Color("LC1"),
-                        Color("LC2").opacity(0.8),
-                        Color("red")
-                    ],
-                                   startPoint: .top, endPoint: .bottom)
-                        .frame(width: 100, height: 100)
-                        .clipShape(Circle())
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                        .padding(.trailing)
-                        .offset(y: -25)
-                        .ignoresSafeArea()
-                    
-                    Circle()
-                        .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
-                        .frame(width: 30, height: 30)
-                        .blur(radius: 2)
-                        .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .bottomTrailing)
-                        .padding(30)
-                    
-                    Circle()
-                        .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
-                        .frame(width: 23, height: 23)
-                        .blur(radius: 2)
-                        .frame(maxWidth: .infinity,maxHeight: .infinity ,alignment: .topLeading)
-                        .padding(.leading, 30)
-                }
+                        LinearGradient(colors: gradientColors,
+                                       startPoint: .top, endPoint: .bottom)
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                            .padding(.trailing)
+                            .offset(y: -25)
+                            .ignoresSafeArea()
+
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
+                            .frame(width: 30, height: 30)
+                            .blur(radius: 2)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity, alignment: .bottomTrailing)
+                            .padding(30)
+
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
+                            .frame(width: 23, height: 23)
+                            .blur(radius: 2)
+                            .frame(maxWidth: .infinity,maxHeight: .infinity ,alignment: .topLeading)
+                            .padding(.leading, 30)
+                    }
                 )
                 .gesture(
                     DragGesture()
                         .onChanged { value in
-                    draggedOffset = value.translation
-                }
+                            draggedOffset = value.translation
+                        }
                         .onEnded { value in
-                    if draggedOffset.width > 100 {
-                        showLoginPage = false
-                    }
-                    draggedOffset = .zero
-                }
+                            if draggedOffset.width > 100 {
+                                showLoginPage = false
+                            }
+                            draggedOffset = .zero
+                        }
                         .simultaneously(with: TapGesture())
                 )
-            
+
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 15) {
                     Text(loginData.registerUser ? "Register" : "Login")
                         .font(.system(size: 22).lowercaseSmallCaps().bold())
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     CustomTextField(icon: "envelope", title: "Email", hint: "rumenguin@gmail.com", value: $loginData.email, showPassword: .constant(false))
                         .padding(.top, 30)
-                    
+
                     CustomTextField(icon: "lock", title: "Password", hint: "12345", value: $loginData.password, showPassword: $loginData.showPassword)
                         .padding(.top, 10)
                         .padding(.bottom, 20)
-                    
+
                     if loginData.registerUser {
                         CustomTextField(icon: "envelope", title: "Re-enter Password", hint: "12345", value: $loginData.reEnterPassword, showPassword: $loginData.showReEnterPassword)
                             .padding(.top, 10)
                     }
-                    
+
                     Button {
                         if loginData.registerUser {
                             if loginData.registerUserValid() {
@@ -151,8 +160,20 @@ struct LoginPage: View {
                         Alert(
                             title: Text("Incorrect Information"),
                             message: Text("Please add the correct email & password!"),
-                            primaryButton: .destructive(Text("DELETE")) {},
-                            secondaryButton: .cancel(Text("Cancel"))
+                            primaryButton: .destructive(
+                                Text(primaryButtonTitle),
+                                action: {
+                                    // Clear email and password fields
+                                    loginData.email = ""
+                                    loginData.password = ""
+                                }
+                            ),
+                            secondaryButton: .cancel(
+                                Text(secondaryButtonTitle),
+                                action: {
+                                    // Handle secondary button action here, if needed
+                                }
+                            )
                         )
                     }
 
@@ -193,66 +214,57 @@ struct LoginPage: View {
         .fullScreenCover(isPresented: $navigateToMainPage) {
             MainPage()
         }
-        .zIndex(1) // To bring the alert view to the front
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("Incorrect Information"),
-                message: Text("Please add the correct email & password!"),
-                primaryButton: .destructive(Text("DELETE"), action: {
-                // Clear email and password fields
-                loginData.email = ""
-                loginData.password = ""
-            }),
-                secondaryButton: .cancel(Text("Cancel"), action: {
-                // Handle secondary button action here, if needed
-            })
-            )
-        }
     }
 }
 
-    @ViewBuilder
-    func CustomTextField(icon: String, title: String, hint: String, value: Binding<String>, showPassword: Binding<Bool>) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label {
-                Text(title)
-                    .font(.system(size: 14))
-            } icon: {
-                Image(systemName: icon)
-            }
-            .foregroundColor(Color.black.opacity(0.8))
+@ViewBuilder
+func CustomTextField(icon: String, title: String, hint: String, value: Binding<String>, showPassword: Binding<Bool>) -> some View {
+    VStack(alignment: .leading, spacing: 12) {
+        Label {
+            Text(title)
+                .font(.system(size: 14))
+        } icon: {
+            Image(systemName: icon)
+        }
+        .foregroundColor(Color.black.opacity(0.8))
 
-            if title.contains("Password") && !showPassword.wrappedValue {
-                SecureField(hint, text: value)
+        if title.contains("Password") {
+            if showPassword.wrappedValue {
+                TextField(hint, text: value)
                     .padding(.top, 2)
             } else {
-                TextField(hint, text: value)
-                    .padding(.top,2)
+                SecureField(hint, text: value)
+                    .padding(.top, 2)
             }
+        } else {
+            TextField(hint, text: value)
+                .padding(.top, 2)
+        }
 
-            Divider()
-                .background(Color.black.opacity(0.4))
-        }
-        .overlay(
-            Group {
-                if title.contains("Password") {
-                    Button(action: {
-                        showPassword.wrappedValue.toggle()
-                    }, label: {
-                        Text(showPassword.wrappedValue ? "Hide" : "Show")
-                            .font(.system(size: 13).bold())
-                            .foregroundColor(.red)
-                    })
-                    .offset(y: 8)
-                }
+        Divider()
+            .background(Color.black.opacity(0.4))
+    }
+    .overlay(
+        Group {
+            if title.contains("Password") {
+                Button(action: {
+                    showPassword.wrappedValue.toggle()
+                }, label: {
+                    Text(showPassword.wrappedValue ? "Hide" : "Show")
+                        .font(.system(size: 13).bold())
+                        .foregroundColor(.red)
+                })
+                .offset(y: 8)
             }
-        )
-    }
-    struct LoginPage_Previews: PreviewProvider {
-        static var previews: some View {
-            LoginPage(showLoginPage: .constant(true))
         }
+    )
+}
+
+struct LoginPage_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginPage(showLoginPage: .constant(true))
     }
+}
 
 
 
