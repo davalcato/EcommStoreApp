@@ -6,15 +6,28 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct ProfilePage: View {
+    @State private var showLogoutAlert = false
+
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
-                    Text("My Profile")
-                        .font(.system(size: 28).bold())
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack {
+                        Text("My Profile")
+                            .font(.system(size: 28).bold())
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Spacer()
+                        Button(action: {
+                            showLogoutAlert = true
+                        }) {
+                            Image(systemName: "power")
+                                .font(.system(size: 15))
+                                .foregroundColor(.black)
+                        }
+                    }
                     
                     VStack(spacing: 15) {
                         Image("Memo")
@@ -92,8 +105,22 @@ struct ProfilePage: View {
                 Color("Color").ignoresSafeArea()
             )
         }
+        .alert(isPresented: $showLogoutAlert) {
+            Alert(
+                title: Text("LOGOUT"),
+                message: Text("Are you sure you want to Logout?"),
+                primaryButton: .destructive(
+                    Text("Logout"),
+                    action: {
+                        // Handle Logout action here
+                        // For example, clear user session or show login screen
+                    }
+                ),
+                secondaryButton: .cancel(Text("Cancel"))
+            )
+        }
     }
-    
+
     @ViewBuilder
     func CustomNavigationLink<Detail: View>(title: String, @ViewBuilder content: @escaping () -> Detail) -> some View {
         NavigationLink(destination: content()) {
@@ -106,7 +133,6 @@ struct ProfilePage: View {
                 
                 Image(systemName: "chevron.right")
             }
-            
             .foregroundColor(.black)
             .padding()
             .background(
