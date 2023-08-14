@@ -10,6 +10,7 @@ import KeychainSwift
 
 struct ProfilePage: View {
     @State private var showLogoutAlert = false
+    @State private var navigateToLoginPage = false
 
     var body: some View {
         NavigationView {
@@ -27,6 +28,7 @@ struct ProfilePage: View {
                                 .font(.system(size: 15))
                                 .foregroundColor(.black)
                         }
+                        .padding(.trailing, 20) // Add padding to the right of the button
                     }
                     
                     VStack(spacing: 15) {
@@ -66,6 +68,10 @@ struct ProfilePage: View {
                             .background(
                                 Color("Color").ignoresSafeArea())
                     }
+                    
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10) // Adjust the top padding
+                    
                     CustomNavigationLink(title: "Shopping Address") {
                         Text("")
                             .navigationTitle("Shopping Address")
@@ -73,6 +79,9 @@ struct ProfilePage: View {
                             .background(
                                 Color("Color").ignoresSafeArea())
                     }
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10) // Adjust the top padding
+                    
                     CustomNavigationLink(title: "Order History") {
                         Text("")
                             .navigationTitle("Order History")
@@ -80,6 +89,10 @@ struct ProfilePage: View {
                             .background(
                                 Color("Color").ignoresSafeArea())
                     }
+                    
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10) // Adjust the top padding
+                    
                     CustomNavigationLink(title: "Cards") {
                         Text("")
                             .navigationTitle("Cards")
@@ -87,6 +100,10 @@ struct ProfilePage: View {
                             .background(
                                 Color("Color").ignoresSafeArea())
                     }
+                    
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10) // Adjust the top padding
+                    
                     CustomNavigationLink(title: "Notifications") {
                         Text("")
                             .navigationTitle("Notifications")
@@ -94,32 +111,46 @@ struct ProfilePage: View {
                             .background(
                                 Color("Color").ignoresSafeArea())
                     }
-                }
-                .padding(.horizontal, 22)
-                .padding(.vertical, 20)
-
-            }
-            .navigationBarHidden(true)
-            .frame(maxWidth:.infinity, maxHeight: .infinity)
-            .background(
-                Color("Color").ignoresSafeArea()
-            )
-        }
-        .alert(isPresented: $showLogoutAlert) {
-            Alert(
-                title: Text("LOGOUT"),
-                message: Text("Are you sure you want to Logout?"),
-                primaryButton: .destructive(
-                    Text("Logout"),
-                    action: {
-                        // Handle Logout action here
-                        // For example, clear user session or show login screen
-                    }
-                ),
-                secondaryButton: .cancel(Text("Cancel"))
-            )
-        }
-    }
+                    .padding(.horizontal, 22)
+                    .padding(.top, 10) // Adjust the top padding
+                        
+                    // Logout Custom Navigation Link
+                                        CustomNavigationLink(title: "Logout") {
+                                            EmptyView()
+                                                .onAppear {
+                                                    showLogoutAlert = true
+                                                }
+                                        }
+                                        .padding(.horizontal, 22)
+                                        .padding(.top, 20) // Adjust the top padding
+                                    }
+                                    .navigationBarHidden(true)
+                                    .frame(maxWidth:.infinity, maxHeight: .infinity)
+                                    .background(
+                                        Color("Color").ignoresSafeArea()
+                                    )
+                                }
+                                .alert(isPresented: $showLogoutAlert) {
+                                    Alert(
+                                        title: Text("LOGOUT"),
+                                        message: Text("Are you sure you want to Logout?"),
+                                        primaryButton: .destructive(
+                                            Text("Logout"),
+                                            action: {
+                                                // Handle Logout action here
+                                                // For example, clear user session or show login screen
+                                                UserDefaults.standard.removeObject(forKey: "log_Status")
+                                                navigateToLoginPage = true // Set the state to trigger NavigationLink
+                                            }
+                                        ),
+                                        secondaryButton: .cancel(Text("Cancel"))
+                                    )
+                                }
+                                .fullScreenCover(isPresented: $navigateToLoginPage) {
+                                    LoginPage(showLoginPage: $navigateToLoginPage)
+                                }
+                            }
+                        }
 
     @ViewBuilder
     func CustomNavigationLink<Detail: View>(title: String, @ViewBuilder content: @escaping () -> Detail) -> some View {
@@ -149,3 +180,4 @@ struct ProfilePage_Previews: PreviewProvider {
         ProfilePage()
     }
 }
+        

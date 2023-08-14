@@ -195,6 +195,17 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        MainPage()
+        let animation = Namespace().wrappedValue
+        
+        if #available(iOS 15.0, *) {
+            return AnyView(
+                SearchView(animation: animation) // Assuming you have a SearchView in your app
+                    .environmentObject(SharedDataModel()) // Provide the appropriate SharedDataModel object
+                    .environmentObject(LoginState()) // Provide the appropriate LoginState object
+            )
+        } else {
+            // Fallback on earlier versions
+            return AnyView(EmptyView())
+        }
     }
 }

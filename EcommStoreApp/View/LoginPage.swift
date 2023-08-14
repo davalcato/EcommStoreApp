@@ -10,6 +10,8 @@ import KeychainSwift
 
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
+    @EnvironmentObject private var loginState: LoginState // Use the LoginState object
+    
         @State private var draggedOffset: CGSize = .zero
         @Binding var showLoginPage: Bool
         @State private var navigateToMainPage: Bool = false
@@ -25,7 +27,7 @@ struct LoginPage: View {
         Color("red")
     ]
 
-    private let primaryButtonTitle = "DELETE"
+    private let primaryButtonTitle = "Delete"
     private let secondaryButtonTitle = "Cancel"
 
     var body: some View {
