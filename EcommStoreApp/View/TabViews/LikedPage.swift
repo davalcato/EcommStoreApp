@@ -11,93 +11,41 @@ struct LikedPage: View {
     
     @EnvironmentObject var sharedData: SharedDataModel
     
-    //delete option
-    @State var showDeleteOption: Bool = false
-    
     var body: some View {
-        
-        NavigationView{
-            ScrollView(.vertical, showsIndicators: false){
-                VStack{
-                    HStack{
-                        Text("Favourites")
-                            .font(.system(size: 28).bold())
-                        
-                        Spacer()
-                        
-                        Button{
-                            withAnimation{
-                                showDeleteOption.toggle()
-                            }
-                        }label: {
-                            Image(systemName: "trash")
-                                .font(.title2)
-                                .foregroundColor(.red)
+        NavigationView {
+            List {
+                Section(header: Text("Favourites").font(.system(size: 28).bold())) {
+                    if sharedData.likedProducts.isEmpty {
+                        // Display this content if there are no liked products
+                        EmptyLikedProductsView()
+                    } else {
+                        ForEach(sharedData.likedProducts) { product in
+                            CardView(product: product)
                         }
-                        .opacity(sharedData.likedProducts.isEmpty ? 0 : 1)
-                    }
-                    
-                    //checking if liked products are empty
-                    if sharedData.likedProducts.isEmpty{
-                        Group{
-                            Image("cat")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .padding()
-                                .padding(.top, 35)
-                            Text("No favourites yet!")
-                                .font(.system(size: 25))
-                                .fontWeight(.semibold)
-                            
-                            Text("Hit the like button on each product page to save favorite ones.")
-                                .font(.system(size: 18).bold())
-                                .foregroundColor(.secondary)
-                                .padding(.horizontal)
-                                .padding(.top, 10)
-                                .multilineTextAlignment(.center)
-                        }
-                    }else{
-                        //displaying products
-                        VStack(spacing: 15) {
-                            //for designing
-                            ForEach(sharedData.likedProducts){product in
-                                HStack(spacing: 0) {
-                                    
-                                    if showDeleteOption{
-                                        Button{
-                                            deleteProduct(product: product)
-                                        }label: {
-                                            Image(systemName: "minus.circle.fill")
-                                                .font(.title2)
-                                                .foregroundColor(.red)
-                                        }
-                                        .padding(.trailing)
-                                    }
-                                    
-                                    
-                                    CardView(product: product)
-                                }
-                            }
-                        }
-                        .padding(.top, 25)
-                        .padding(.horizontal)
+                        .onDelete(perform: deleteProducts)
                     }
                 }
-                .padding()
             }
-            .navigationBarHidden(true)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-            
-                Color("Color").ignoresSafeArea()
+            .listStyle(PlainListStyle())
+            .navigationBarItems(trailing:
+                EditButton()
             )
+            .onAppear {
+                UITableView.appearance().backgroundColor = UIColor.clear
+                UITableViewCell.appearance().backgroundColor = UIColor.clear
+            }
+            .background(Color("Color").ignoresSafeArea())
         }
     }
     
+    func deleteProducts(at offsets: IndexSet) {
+        sharedData.likedProducts.remove(atOffsets: offsets)
+    }
+    
     @ViewBuilder
-    func CardView(product: Product) -> some View{
+    func CardView(product: Product) -> some View {
         
-        HStack(spacing: 15){
+        HStack(spacing: 15) {
             
             Image(product.productImage)
                 .resizable()
@@ -128,16 +76,24 @@ struct LikedPage: View {
         )
     }
     
-    func deleteProduct(product: Product) {
-        
-        if let index = sharedData.likedProducts.firstIndex(where: {currentProduct in
-            
-            return product.id == currentProduct.id
-
-        }){
-            let _ = withAnimation{
-                //removing
-                sharedData.likedProducts.remove(at: index)
+    struct EmptyLikedProductsView: View {
+        var body: some View {
+            Group {
+                Image("cat")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+                    .padding(.top, 35)
+                Text("No favourites yet!")
+                    .font(.system(size: 25))
+                    .fontWeight(.semibold)
+                
+                Text("Hit the like button on each product page to save favorite ones.")
+                    .font(.system(size: 18).bold())
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal)
+                    .padding(.top, 10)
+                    .multilineTextAlignment(.center)
             }
         }
     }
@@ -147,6 +103,5 @@ struct LikedPage_Previews: PreviewProvider {
     static var previews: some View {
         LikedPage()
             .environmentObject(SharedDataModel())
-            
     }
 }
