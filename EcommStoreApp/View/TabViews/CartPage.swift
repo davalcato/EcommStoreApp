@@ -1,7 +1,18 @@
 //
 //  CartPage.swift
 //  EcommStoreApp
-//
+//  .background(.red)
+
+/*  Button{
+ withAnimation{
+     showDeleteOption.toggle()
+ }
+}label: {
+ Image(systemName: "trash")
+     .font(.title2)
+     .foregroundColor(.red)
+*/
+
 //  Created by Daval Cato on 7/6/23.
 //
 
@@ -11,8 +22,8 @@ struct CartPage: View {
     
     @EnvironmentObject var sharedData: SharedDataModel
     
-    //delete option
     @State var showDeleteOption: Bool = false
+    @State var isCheckoutActive = false
     
     var body: some View {
         
@@ -36,38 +47,45 @@ struct CartPage: View {
                                     .foregroundColor(.red)
                             }
                             .opacity(sharedData.cartProducts.isEmpty ? 0 : 1)
+                            .onTapGesture {
+                                if !sharedData.cartProducts.isEmpty {
+                                    sharedData.cartProducts.removeAll()
+                                }
+                            }
                         }
                         
-                        //checking if liked products are empty
-                        if sharedData.cartProducts.isEmpty{
-                            Group{
+                        if sharedData.cartProducts.isEmpty {
+                            Group {
                                 Image("empty-cart")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .foregroundColor(Color("black"))
                                     .padding()
                                     .padding(.top, 35)
+                                
                                 Text("No items added!")
                                     .font(.system(size: 25))
                                     .fontWeight(.semibold)
                                 
-                                Text("Hit the plus button to save into basket.")
+                                Text("Hit the plus button to save into the basket.")
                                     .font(.system(size: 18).bold())
                                     .foregroundColor(.secondary)
                                     .padding(.horizontal)
                                     .padding(.top, 10)
                                     .multilineTextAlignment(.center)
                             }
-                        }else{
-                            //displaying products
+                        } else {
                             VStack(spacing: 15) {
-                                //for designing
                                 ForEach($sharedData.cartProducts){$product in
                                     HStack(spacing: 0) {
                                         
-                                        if showDeleteOption{
+                                        if showDeleteOption {
                                             Button{
-                                                deleteProduct(product: product)
+                                                if let index = sharedData.cartProducts.firstIndex(where: { currentProduct in
+                                                    return product.id == currentProduct.id
+                                                }) {
+                                                    sharedData.cartProducts.remove(at: index)
+                                                }
                                             }label: {
                                                 Image(systemName: "minus.circle.fill")
                                                     .font(.title2)
@@ -76,7 +94,6 @@ struct CartPage: View {
                                             .padding(.trailing)
                                         }
                                         
-                                        
                                         CardView(product: $product)
                                     }
                                 }
@@ -84,63 +101,47 @@ struct CartPage: View {
                             .padding(.top, 25)
                             .padding(.horizontal)
                         }
+                        
+                        if !sharedData.cartProducts.isEmpty {
+                            Group {
+                                HStack {
+                                    Text("Total")
+                                        .font(.system(size: 14))
+                                        .fontWeight(.semibold)
+                                    
+                                    Spacer()
+                                    
+                                    Text(sharedData.getTotalPrice())
+                                        .font(.system(size: 18).bold())
+                                        .foregroundColor(Color("black"))
+                                }
+                                
+                                NavigationLink(
+                                    destination: CheckoutPage(subtotal: sharedData.getTotalPrice()),
+                                    isActive: $isCheckoutActive,
+                                    label: {
+                                        Text("Checkout")
+                                            .font(.system(size: 18).bold())
+                                            .foregroundColor(.white)
+                                            .padding(.vertical, 18)
+                                            .frame(maxWidth: .infinity)
+                                            .background(Color("black"))
+                                            .cornerRadius(15)
+                                            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
+                                    })
+                                .padding(.vertical)
+                            }
+                            .padding(.horizontal, 25)
+                        }
                     }
                     .padding()
-                }
-                
-                //showing total and check out button
-                if !sharedData.cartProducts.isEmpty{
-                    Group{
-                        HStack{
-                            Text("Total")
-                                .font(.system(size: 14))
-                                .fontWeight(.semibold)
-                            
-                            Spacer()
-                            
-                            Text(sharedData.getTotalPrice())
-                                .font(.system(size: 18).bold())
-                                .foregroundColor(Color("black"))
-                        }
-                        
-                        Button{
-                            
-                        }label: {
-                            Text("Checkout")
-                                .font(.system(size: 18).bold())
-                                .foregroundColor(.white)
-                                .padding(.vertical, 18)
-                                .frame(maxWidth: .infinity)
-                                .background(Color("black"))
-                                .cornerRadius(15)
-                                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
-                        }
-                        
-                        .padding(.vertical)
-                    }
-                    .padding(.horizontal, 25)
                 }
             }
             .navigationBarHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-            
                 Color("Color").ignoresSafeArea()
             )
-        }
-    }
-    
-    func deleteProduct(product: Product) {
-        
-        if let index = sharedData.cartProducts.firstIndex(where: {currentProduct in
-            
-            return product.id == currentProduct.id
-
-        }){
-            let _ = withAnimation{
-                //removing
-                sharedData.cartProducts.remove(at: index)
-            }
         }
     }
 }
@@ -152,15 +153,10 @@ struct CartPage_Previews: PreviewProvider {
 }
 
 struct CardView: View {
-    //making product as binding so as to update in real time
     @Binding var product: Product
     
-   
-    
-   
-    var body: some View{
+    var body: some View {
         HStack(spacing: 15){
-            
             Image(product.productImage)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -176,7 +172,6 @@ struct CardView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(Color("black"))
                 
-                //quantity button
                 HStack(spacing: 10) {
                     Text("Quantity")
                         .font(.system(size: 14))
@@ -190,7 +185,7 @@ struct CardView: View {
                                 .font(.caption)
                                 .foregroundColor(.white)
                                 .frame(width: 20, height: 20)
-                                .background(.teal)
+                                .background(.red)
                                 .cornerRadius(4)
                         } else {
                             // Fallback on earlier versions
@@ -210,7 +205,7 @@ struct CardView: View {
                                 .font(.caption)
                                 .foregroundColor(.white)
                                 .frame(width: 20, height: 20)
-                                .background(.teal)
+                                .background(.green)
                                 .cornerRadius(4)
                         } else {
                             // Fallback on earlier versions
@@ -226,5 +221,30 @@ struct CardView: View {
             Color.white
                 .cornerRadius(10)
         )
+    }
+}
+
+struct CheckoutPage: View {
+    let subtotal: String
+    
+    var body: some View {
+        VStack {
+            Text("Checkout")
+                .font(.system(size: 15).bold())
+                .padding(.top, 20)
+            
+            Spacer()
+            
+            HStack {
+                Text("Subtotal")
+                    .font(.system(size: 12))
+                
+                Spacer()
+                
+                Text(subtotal)
+                    .font(.system(size: 12))
+            }
+            .padding(EdgeInsets(top: 0, leading: 25, bottom: 20, trailing: 25))
+        }
     }
 }
