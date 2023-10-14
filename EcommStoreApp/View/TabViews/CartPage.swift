@@ -1,18 +1,7 @@
 //
 //  CartPage.swift
 //  EcommStoreApp
-//  .background(.red)
-
-/*  Button{
- withAnimation{
-     showDeleteOption.toggle()
- }
-}label: {
- Image(systemName: "trash")
-     .font(.title2)
-     .foregroundColor(.red)
-*/
-
+//
 //  Created by Daval Cato on 7/6/23.
 //
 
@@ -224,27 +213,4 @@ struct CardView: View {
     }
 }
 
-struct CheckoutPage: View {
-    let subtotal: String
-    
-    var body: some View {
-        VStack {
-            Text("Checkout")
-                .font(.system(size: 15).bold())
-                .padding(.top, 20)
-            
-            Spacer()
-            
-            HStack {
-                Text("Subtotal")
-                    .font(.system(size: 12))
-                
-                Spacer()
-                
-                Text(subtotal)
-                    .font(.system(size: 12))
-            }
-            .padding(EdgeInsets(top: 0, leading: 25, bottom: 20, trailing: 25))
-        }
-    }
-}
+

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1D77EC96B3D80EC3C0FF272D /* Pods_EcommStoreApp_EcommStoreAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 959BAC7230926993B9423AAB /* Pods_EcommStoreApp_EcommStoreAppUITests.framework */; };
 		30864A4D9BE2E07E7A7DFB0B /* Pods_EcommStoreAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EFA4F081925B0DAE3E76FCC /* Pods_EcommStoreAppTests.framework */; };
+		7509B65C2ADA186C001854F7 /* CheckoutPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509B65B2ADA186C001854F7 /* CheckoutPage.swift */; };
+		7509B65E2ADA1EF3001854F7 /* PaymentPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509B65D2ADA1EF3001854F7 /* PaymentPage.swift */; };
 		758905C92A75D77800BD6E2A /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758905C82A75D77800BD6E2A /* LoginState.swift */; };
 		758905CB2A76E7E900BD6E2A /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758905CA2A76E7E800BD6E2A /* AppCoordinator.swift */; };
 		758C8B342A575F0300A52C66 /* EcommStoreAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C8B332A575F0300A52C66 /* EcommStoreAppApp.swift */; };
@@ -61,6 +63,8 @@
 		2E369AAB9DA2ABC73BBAB591 /* Pods-EcommStoreAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EcommStoreAppTests.release.xcconfig"; path = "Target Support Files/Pods-EcommStoreAppTests/Pods-EcommStoreAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		650CCB1896DEDE49FDA9534B /* Pods-EcommStoreApp-EcommStoreAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EcommStoreApp-EcommStoreAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-EcommStoreApp-EcommStoreAppUITests/Pods-EcommStoreApp-EcommStoreAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6EFA4F081925B0DAE3E76FCC /* Pods_EcommStoreAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EcommStoreAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7509B65B2ADA186C001854F7 /* CheckoutPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutPage.swift; sourceTree = "<group>"; };
+		7509B65D2ADA1EF3001854F7 /* PaymentPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPage.swift; sourceTree = "<group>"; };
 		758905C82A75D77800BD6E2A /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		758905CA2A76E7E800BD6E2A /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		758C8B302A575F0300A52C66 /* EcommStoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EcommStoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,6 +223,8 @@
 			children = (
 				758C8B602A576C8100A52C66 /* TabViews */,
 				758C8B712A576F1B00A52C66 /* OnBoardingPage.swift */,
+				7509B65B2ADA186C001854F7 /* CheckoutPage.swift */,
+				7509B65D2ADA1EF3001854F7 /* PaymentPage.swift */,
 				758C8B732A576F5500A52C66 /* LoginPage.swift */,
 				758C8B752A576FA100A52C66 /* CustomCorners.swift */,
 				758C8B5E2A576B9E00A52C66 /* MainPage.swift */,
@@ -496,6 +502,7 @@
 			files = (
 				758C8B6C2A576E9300A52C66 /* ProfilePage.swift in Sources */,
 				758C8B362A575F0300A52C66 /* ContentView.swift in Sources */,
+				7509B65E2ADA1EF3001854F7 /* PaymentPage.swift in Sources */,
 				758C8B702A576EE700A52C66 /* CartPage.swift in Sources */,
 				758C8B342A575F0300A52C66 /* EcommStoreAppApp.swift in Sources */,
 				758C8B7C2A57705C00A52C66 /* StaggeredGrid.swift in Sources */,
@@ -512,6 +519,7 @@
 				758C8B642A576D5A00A52C66 /* Product.swift in Sources */,
 				758C8B7A2A57702D00A52C66 /* SearchView.swift in Sources */,
 				758C8B622A576CB600A52C66 /* Home.swift in Sources */,
+				7509B65C2ADA186C001854F7 /* CheckoutPage.swift in Sources */,
 				758C8B5F2A576B9F00A52C66 /* MainPage.swift in Sources */,
 				758C8B782A576FE300A52C66 /* MoreProductsView.swift in Sources */,
 				758C8B7E2A57708800A52C66 /* ProductDetailView.swift in Sources */,
