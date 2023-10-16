@@ -34,5 +34,3 @@ struct PaymentMethodView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
     }
 }
-
-

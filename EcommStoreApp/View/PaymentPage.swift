@@ -56,12 +56,13 @@ struct CheckoutPage: View {
                 )
                 .padding(.horizontal, 20)
             }
-            .navigationBarHidden(true)
+            .navigationBarHidden(true) // Hide the navigation bar in this view
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemGray6).ignoresSafeArea())
         }
     }
 }
+
 
 struct PaymentMethod: Identifiable, Hashable {
     let id = UUID()
@@ -78,40 +79,39 @@ struct PaymentPage: View {
     ]
 
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("Select Payment Method")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.top, 20)
+        VStack {
+            Text("Select Payment Method")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.top, 20)
 
-                Spacer()
+            Spacer()
 
-                LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                    ForEach(paymentMethods, id: \.self) { method in
-                        PaymentMethodView(method: method, selectedPaymentMethod: $selectedPaymentMethod)
-                            .onTapGesture {
-                                selectedPaymentMethod = method
-                            }
-                    }
-                }
-                .padding(.horizontal, 20)
-
-                Spacer()
-
-                if let selectedMethod = selectedPaymentMethod {
-                    Text("Selected Payment Method: \(selectedMethod.name)")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                } else {
-                    Text("No Payment Method Selected")
-                        .font(.title2)
-                        .fontWeight(.semibold)
+            LazyHGrid(rows: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                ForEach(paymentMethods, id: \.self) { method in
+                    PaymentMethodView(method: method, selectedPaymentMethod: $selectedPaymentMethod)
+                        .onTapGesture {
+                            selectedPaymentMethod = method
+                        }
                 }
             }
-            .navigationBarHidden(true)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGray6).ignoresSafeArea())
+            .padding(.horizontal, 20)
+
+            Spacer()
+
+            if let selectedMethod = selectedPaymentMethod {
+                Text("Selected Payment Method: \(selectedMethod.name)")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            } else {
+                Text("No Payment Method Selected")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6).ignoresSafeArea())
+        .navigationBarHidden(true)
     }
 }
+
