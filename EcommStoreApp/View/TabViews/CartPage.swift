@@ -13,6 +13,7 @@ struct CartPage: View {
     
     @State var showDeleteOption: Bool = false
     @State var isCheckoutActive = false
+    @State var selectedPaymentMethod: PaymentMethod? // Add this State variable
     
     var body: some View {
         
@@ -106,19 +107,19 @@ struct CartPage: View {
                                 }
                                 
                                 NavigationLink(
-                                    destination: CheckoutPage(subtotal: sharedData.getTotalPrice()),
+                                    destination: CheckoutPage(subtotal: sharedData.getTotalPrice(), selectedPaymentMethod: $selectedPaymentMethod),
                                     isActive: $isCheckoutActive,
                                     label: {
-                                        Text("Checkout")
-                                            .font(.system(size: 18).bold())
-                                            .foregroundColor(.white)
-                                            .padding(.vertical, 18)
-                                            .frame(maxWidth: .infinity)
-                                            .background(Color("black"))
-                                            .cornerRadius(15)
-                                            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
-                                    })
-                                .padding(.vertical)
+                                    Text("Checkout")
+                                        .font(.system(size: 18).bold())
+                                        .foregroundColor(.white)
+                                        .padding(.vertical, 18)
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color("black"))
+                                        .cornerRadius(15)
+                                        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
+                                })
+                                    .padding(.vertical)
                             }
                             .padding(.horizontal, 25)
                         }
