@@ -9,8 +9,13 @@ import SwiftUI
 
 struct CheckoutPage: View {
     let subtotal: String
-    @Binding var selectedPaymentMethod: PaymentMethod? // Add this binding
+    @Binding var selectedPaymentMethod: PaymentMethod?
 
+    @State private var street: String = ""
+    @State private var city: String = ""
+    @State private var state: String = ""
+    @State private var promoCode: String = ""
+    
     init(subtotal: String, selectedPaymentMethod: Binding<PaymentMethod?>) {
         self.subtotal = subtotal
         self._selectedPaymentMethod = selectedPaymentMethod
@@ -38,11 +43,27 @@ struct CheckoutPage: View {
                         .fontWeight(.semibold)
                 }
                 .padding(.horizontal, 20)
-
+                
+                // Shipping Address
+                TextField("Street", text: $street)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+                
+                TextField("City", text: $city)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+                
+                TextField("State", text: $state)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+                
+                // Promo Code Field
+                TextField("Promo Code", text: $promoCode)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+                
                 Spacer()
-
-                // Add more checkout details, buttons, and other UI elements here
-
+                
                 NavigationLink(
                     destination: PaymentPage(selectedPaymentMethod: $selectedPaymentMethod),
                     label: {
@@ -57,6 +78,20 @@ struct CheckoutPage: View {
                     }
                 )
                 .padding(.horizontal, 20)
+                
+                Button(action: {
+                    // Add logic to place the order
+                }) {
+                    Text("Place Order")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .cornerRadius(15)
+                }
+                .padding(.horizontal, 20)
             }
             .navigationBarHidden(true) // Hide the navigation bar in this view
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -64,6 +99,7 @@ struct CheckoutPage: View {
         }
     }
 }
+
 
 
 
