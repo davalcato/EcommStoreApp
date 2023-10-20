@@ -31,11 +31,15 @@ struct PaymentPage: View {
 
     var body: some View {
         VStack {
+            Text("Selected Payment Method: \(selectedPaymentMethod?.name ?? "None")")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.top, 20)
+
             HStack {
-                Text("Select Payment Method")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.top, 20)
+                Text("Pay with:")
+                    .font(.system(size: 10))
+                    .padding(.leading, 20)
 
                 Spacer()
 
@@ -69,30 +73,20 @@ struct PaymentPage: View {
 
             Spacer()
 
-            if let selectedMethod = selectedPaymentMethod {
-                Text("Selected Payment Method: \(selectedMethod.name)")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                NavigationLink(
-                    destination: ContinuePage(shippingAddress: shippingAddress),
-                    label: {
-                        Text("Continue")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.black)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.yellow)
-                            .cornerRadius(15)
-                    }
-                )
-                .padding(.horizontal, 20)
-            } else {
-                Text("No Payment Method Selected")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
+            NavigationLink(
+                destination: ContinuePage(shippingAddress: shippingAddress),
+                label: {
+                    Text("Continue")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.yellow)
+                        .cornerRadius(15)
+                }
+            )
+            .padding(.horizontal, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
