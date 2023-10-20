@@ -12,7 +12,7 @@ struct ShippingAddress: Codable {
     var street: String
     var city: String
     var state: String
-    var zipCode: String // Added ZIP code property
+    var zipCode: String
 }
 
 struct CheckoutPage: View {
@@ -21,6 +21,8 @@ struct CheckoutPage: View {
 
     // Create an instance of ShippingAddress to store the address information
     @State private var shippingAddress = ShippingAddress(street: "", city: "", state: "", zipCode: "")
+
+    @State private var promoCode: String = "" // Added promo code property
 
     init(subtotal: String, selectedPaymentMethod: Binding<PaymentMethod?>) {
         self.subtotal = subtotal
@@ -73,12 +75,17 @@ struct CheckoutPage: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal, 20)
 
+                // Promo Code Field
+                TextField("Promo Code", text: $promoCode)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+
                 // ... (Rest of your view)
 
                 // Save the address when the "Proceed to Payment" button is tapped
                 NavigationLink(
-                    destination: PaymentPage(selectedPaymentMethod: $selectedPaymentMethod),
-                    label: {
+                    destination: PaymentPage(selectedPaymentMethod: $selectedPaymentMethod, shippingAddress: $shippingAddress),
+                        label: {
                         Text("Proceed to Payment")
                             .font(.title2)
                             .fontWeight(.semibold)

@@ -14,6 +14,7 @@ struct PaymentMethod: Identifiable, Hashable {
 
 struct PaymentPage: View {
     @Binding var selectedPaymentMethod: PaymentMethod?
+    @Binding var shippingAddress: ShippingAddress // Add this binding
 
     let paymentMethods: [PaymentMethod] = [
         PaymentMethod(name: "Visa"),
@@ -21,8 +22,9 @@ struct PaymentPage: View {
         PaymentMethod(name: "Apple Pay")
     ]
 
-    init(selectedPaymentMethod: Binding<PaymentMethod?>) {
+    init(selectedPaymentMethod: Binding<PaymentMethod?>, shippingAddress: Binding<ShippingAddress>) {
         self._selectedPaymentMethod = selectedPaymentMethod
+        self._shippingAddress = shippingAddress
     }
 
     @State private var addNewPressed = false
@@ -73,7 +75,7 @@ struct PaymentPage: View {
                     .fontWeight(.semibold)
                 
                 NavigationLink(
-                    destination: ContinuePage(),
+                    destination: ContinuePage(shippingAddress: shippingAddress),
                     label: {
                         Text("Continue")
                             .font(.title2)
