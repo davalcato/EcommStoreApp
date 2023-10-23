@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContinuePage: View {
     let shippingAddress: ShippingAddress // Add the shippingAddress parameter
+    let selectedProducts: [Product] // Add the selectedProducts parameter
 
     var body: some View {
         VStack {
@@ -38,45 +39,27 @@ struct ContinuePage: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    Button(action: {
-                        // Add action for the first button
-                    }) {
-                        VStack {
-                            Image("Item1") // Replace "Item1" with your image name
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100) // Adjust image size
-                            Text("Button 1")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
+                    ForEach(selectedProducts) { product in
+                        Button(action: {
+                            // Add action for the product button
+                        }) {
+                            VStack {
+                                Image(product.productImage) // Use the product's image name
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 20, height: 20) // Adjust image size
+                                Text(product.title)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .background(Color.blue) // Use appropriate color
+                            .cornerRadius(15)
                         }
-                        .background(Color.blue)
-                        .cornerRadius(15)
+                        .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
                     }
-                    .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
-
-                    Button(action: {
-                        // Add action for the second button
-                    }) {
-                        VStack {
-                            Image("Item2") // Replace "Item2" with your image name
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100) // Adjust image size
-                            Text("Button 2")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                        }
-                        .background(Color.green)
-                        .cornerRadius(15)
-                    }
-                    .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
                 }
             }
 

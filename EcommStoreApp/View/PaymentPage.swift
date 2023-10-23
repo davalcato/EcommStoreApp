@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+let selectedProducts: [Product] = [
+    Product(type: .Wearable, title: "Apple Watch", subtitle: "Series 6: Red", price: "$359", productImage: "AppleWatch6"),
+    Product(type: .Wearable, title: "Another Product", subtitle: "Description", price: "$199", productImage: "ProductImage2"),
+    // Add more products as needed
+]
+
 struct PaymentMethod: Identifiable, Hashable {
     let id = UUID()
     let name: String
@@ -74,7 +80,7 @@ struct PaymentPage: View {
             Spacer()
 
             NavigationLink(
-                destination: ContinuePage(shippingAddress: shippingAddress),
+                destination: ContinuePage(shippingAddress: shippingAddress, selectedProducts: selectedProducts),
                 label: {
                     Text("Continue")
                         .font(.title2)
