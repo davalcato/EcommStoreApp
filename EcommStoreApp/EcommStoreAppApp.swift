@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct EcommStoreAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    @StateObject private var sharedData = SharedDataModel()
+
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+                    .environmentObject(sharedData)
+            }
         }
     }
-}

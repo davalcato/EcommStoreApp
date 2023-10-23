@@ -44,24 +44,24 @@ struct ContinuePage: View {
                             // Add action for the product button
                         }) {
                             VStack {
-                                Image(product.productImage) // Use the product's image name
+                                Image(product.productImage)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20, height: 20) // Adjust image size
+                                    .frame(width: 100, height: 100) // Adjust image size
                                 Text(product.title)
                                     .font(.title2)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.black)
                             }
-                            .background(Color.blue) // Use appropriate color
+                            .padding()
+                            .background(Color.white)
                             .cornerRadius(15)
                         }
-                        .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
                     }
                 }
             }
+
+            Spacer()
 
             // Rest of your view
         }
