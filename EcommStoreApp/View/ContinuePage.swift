@@ -30,21 +30,60 @@ struct ContinuePage: View {
             Text("State: \(shippingAddress.state)")
             Text("ZIP Code: \(shippingAddress.zipCode)")
 
-            // Rest of your view
+            // Display the items from the CartPage
+            Text("Items from CartPage:")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.top, 20)
 
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    Button(action: {
+                        // Add action for the first button
+                    }) {
+                        VStack {
+                            Image("Item1") // Replace "Item1" with your image name
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100) // Adjust image size
+                            Text("Button 1")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.blue)
+                        .cornerRadius(15)
+                    }
+                    .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
+
+                    Button(action: {
+                        // Add action for the second button
+                    }) {
+                        VStack {
+                            Image("Item2") // Replace "Item2" with your image name
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100) // Adjust image size
+                            Text("Button 2")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.green)
+                        .cornerRadius(15)
+                    }
+                    .frame(width: UIScreen.main.bounds.width * 0.3) // Adjust button size
+                }
+            }
+
+            // Rest of your view
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
         .navigationBarHidden(true)
     }
 }
-
-struct ContinuePage_Previews: PreviewProvider {
-    static var previews: some View {
-        // Sample shipping address for preview
-        let sampleShippingAddress = ShippingAddress(street: "123 Main St", city: "Sample City", state: "CA", zipCode: "12345")
-
-        return ContinuePage(shippingAddress: sampleShippingAddress)
-    }
-}
-
