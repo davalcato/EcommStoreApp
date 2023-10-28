@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    // Log Status
     @AppStorage("log_Status") var log_Status: Bool = false
-    
+    @EnvironmentObject var sharedData: SharedDataModel
+
     var body: some View {
         Group {
             if log_Status {
@@ -21,6 +21,7 @@ struct ContentView: View {
         }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

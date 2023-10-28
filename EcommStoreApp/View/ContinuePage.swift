@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ContinuePage: View {
-    let shippingAddress: ShippingAddress // Add the shippingAddress parameter
-    let selectedProducts: [Product] // Add the selectedProducts parameter
+    let shippingAddress: ShippingAddress
+    @EnvironmentObject var sharedData: SharedDataModel // Access to shared data
+    @State private var selectedProductsInCart: [Product] = []
 
     var body: some View {
         VStack {
@@ -31,15 +32,15 @@ struct ContinuePage: View {
             Text("State: \(shippingAddress.state)")
             Text("ZIP Code: \(shippingAddress.zipCode)")
 
-            // Display the items from the CartPage
-            Text("Items from CartPage:")
+            // Display the items added to the basket
+            Text("Added to Basket:")
                 .font(.title2)
                 .fontWeight(.semibold)
                 .padding(.top, 20)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    ForEach(selectedProducts) { product in
+                    ForEach(selectedProductsInCart) { product in
                         Button(action: {
                             // Add action for the product button
                         }) {
@@ -64,9 +65,16 @@ struct ContinuePage: View {
             Spacer()
 
             // Rest of your view
+
+        }
+        .onAppear {
+            // Populate selectedProductsInCart with products from shared data
+            selectedProductsInCart = sharedData.cartProducts
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
         .navigationBarHidden(true)
     }
 }
+
+
