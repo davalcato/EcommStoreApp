@@ -11,6 +11,8 @@ struct ContinuePage: View {
     let shippingAddress: ShippingAddress
     @EnvironmentObject var sharedData: SharedDataModel // Access to shared data
     @State private var selectedProductsInCart: [Product] = []
+    @State private var showDeleteConfirmation = false
+    @State private var productToDelete: Product?
 
     var body: some View {
         VStack {
@@ -42,13 +44,15 @@ struct ContinuePage: View {
                 HStack(spacing: 10) {
                     ForEach(selectedProductsInCart) { product in
                         Button(action: {
-                            // Add action for the product button
+                            // Display delete confirmation pop-up
+                            showDeleteConfirmation = true
+                            productToDelete = product
                         }) {
                             VStack {
                                 Image(product.productImage)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 100, height: 100) // Adjust image size
+                                    .frame(width: 100, height: 100)
                                 Text(product.title)
                                     .font(.title2)
                                     .fontWeight(.semibold)
@@ -74,7 +78,20 @@ struct ContinuePage: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
         .navigationBarHidden(true)
+        .alert(isPresented: $showDeleteConfirmation) {
+            Alert(
+                title: Text("Confirm Deletion"),
+                message: Text("Are you sure you want to delete this product from your basket?"),
+                primaryButton: .destructive(Text("Delete")) {
+                    if let product = productToDelete, let index = selectedProductsInCart.firstIndex(of: product) {
+                        selectedProductsInCart.remove(at: index)
+                    }
+                    showDeleteConfirmation = false
+                },
+                secondaryButton: .cancel(Text("Cancel")) {
+                    showDeleteConfirmation = false
+                }
+            )
+        }
     }
 }
-
-
