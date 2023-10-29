@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContinuePage: View {
     let shippingAddress: ShippingAddress
-    @EnvironmentObject var sharedData: SharedDataModel // Access to shared data
+    @EnvironmentObject var sharedData: SharedDataModel
     @State private var selectedProductsInCart: [Product] = []
     @State private var showDeleteConfirmation = false
     @State private var productToDelete: Product?
@@ -75,6 +75,10 @@ struct ContinuePage: View {
             // Populate selectedProductsInCart with products from shared data
             selectedProductsInCart = sharedData.cartProducts
         }
+        .onDisappear {
+            // Clear the selectedProductsInCart when leaving the view
+            selectedProductsInCart.removeAll()
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
         .navigationBarHidden(true)
@@ -85,6 +89,10 @@ struct ContinuePage: View {
                 primaryButton: .destructive(Text("Delete")) {
                     if let product = productToDelete, let index = selectedProductsInCart.firstIndex(of: product) {
                         selectedProductsInCart.remove(at: index)
+                        // Also remove the product from sharedData.cartProducts
+                        if let sharedIndex = sharedData.cartProducts.firstIndex(of: product) {
+                            sharedData.cartProducts.remove(at: sharedIndex)
+                        }
                     }
                     showDeleteConfirmation = false
                 },
