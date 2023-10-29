@@ -21,18 +21,34 @@ struct ContinuePage: View {
                 .fontWeight(.bold)
                 .padding(.top, 20)
 
+            // Container for the "Order Summary"
+            VStack {
+                Text("Order Summary")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding(.vertical, 20)
+                
+                // Shipping Address
+                Text("Shipping Address:")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.top, 10)
+
+                Text("Street: \(shippingAddress.street)")
+                Text("City: \(shippingAddress.city)")
+                Text("State: \(shippingAddress.state)")
+                Text("ZIP Code: \(shippingAddress.zipCode)")
+
+                // Number of items added to the basket
+                Text("Items Added: \(selectedProductsInCart.count)")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.top, 20)
+                
+                // Rest of your view
+            }
+
             Spacer()
-
-            // Display the shipping address
-            Text("Shipping Address:")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.top, 20)
-
-            Text("Street: \(shippingAddress.street)")
-            Text("City: \(shippingAddress.city)")
-            Text("State: \(shippingAddress.state)")
-            Text("ZIP Code: \(shippingAddress.zipCode)")
 
             // Display the items added to the basket
             Text("Added to Basket:")
@@ -67,9 +83,6 @@ struct ContinuePage: View {
             }
 
             Spacer()
-
-            // Rest of your view
-
         }
         .onAppear {
             // Populate selectedProductsInCart with products from shared data
