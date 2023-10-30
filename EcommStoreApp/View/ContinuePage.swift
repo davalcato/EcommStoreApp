@@ -15,19 +15,17 @@ struct ContinuePage: View {
     @State private var productToDelete: Product?
 
     var body: some View {
-        VStack {
-            Text("Continue Page")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding(.top, 20)
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.flexible())], spacing: 20) {
+                ForEach(["Order Summary", "Items Added", "Total before Tax", "Estimated Tax", "Order Total"], id: \.self) { item in
+                    Text(item)
+                        .padding()
+                }
+            }
 
+            
             // Container for the "Order Summary"
             VStack {
-                Text("Order Summary")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 10)
-
                 // Number of items added to the basket
                 Text("Items Added: \(selectedProductsInCart.count)")
                     .font(.title2)
@@ -45,11 +43,9 @@ struct ContinuePage: View {
                 Text("City: \(shippingAddress.city)")
                 Text("State: \(shippingAddress.state)")
                 Text("ZIP Code: \(shippingAddress.zipCode)")
-
-                // Rest of your view
             }
-
-            Spacer()
+            
+            Spacer() // Push "Added to Basket" and selected products closer to the bottom
 
             // Display the items added to the basket
             Text("Added to Basket:")
@@ -82,8 +78,8 @@ struct ContinuePage: View {
                     }
                 }
             }
-
-            Spacer()
+            
+            Spacer() // Push the selected products closer to the bottom
         }
         .onAppear {
             // Populate selectedProductsInCart with products from shared data
@@ -117,3 +113,4 @@ struct ContinuePage: View {
         }
     }
 }
+
