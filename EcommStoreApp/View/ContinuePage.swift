@@ -26,8 +26,15 @@ struct ContinuePage: View {
                 Text("Order Summary")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .padding(.vertical, 20)
-                
+                    .padding(.bottom, 10)
+
+                // Number of items added to the basket
+                Text("Items Added: \(selectedProductsInCart.count)")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.top, -5) // Raise it up
+                    .font(.system(size: 11)) // Change the font size to 11
+
                 // Shipping Address
                 Text("Shipping Address:")
                     .font(.title2)
@@ -39,12 +46,6 @@ struct ContinuePage: View {
                 Text("State: \(shippingAddress.state)")
                 Text("ZIP Code: \(shippingAddress.zipCode)")
 
-                // Number of items added to the basket
-                Text("Items Added: \(selectedProductsInCart.count)")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.top, 20)
-                
                 // Rest of your view
             }
 
@@ -69,6 +70,7 @@ struct ContinuePage: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 100, height: 100)
+                                    .cornerRadius(15) // Apply corner radius here
                                 Text(product.title)
                                     .font(.title2)
                                     .fontWeight(.semibold)
@@ -76,7 +78,6 @@ struct ContinuePage: View {
                             }
                             .padding()
                             .background(Color.white)
-                            .cornerRadius(15)
                         }
                     }
                 }
