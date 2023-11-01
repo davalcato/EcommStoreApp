@@ -16,11 +16,10 @@ struct ContinuePage: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible())], spacing: 20) {
+            LazyVGrid(columns: [GridItem(.flexible())], alignment: .leading, spacing: 10) {
                 ForEach(["Order Summary", "Total before Tax", "Estimated Tax", "Order Total"], id: \.self) { item in
                     Text(item)
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading) // Align to the left
+                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0))
                 }
             }
 
@@ -31,8 +30,8 @@ struct ContinuePage: View {
                 Text("Items Added: \(selectedProductsInCart.count)")
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .padding(.top, -5) // Raise it up
-                    .font(.system(size: 11)) // Change the font size to 11
+                    .padding(.top, -5)
+                    .font(.system(size: 11))
 
                 // Shipping Address
                 Text("Shipping Address:")
@@ -46,7 +45,7 @@ struct ContinuePage: View {
                 Text("ZIP Code: \(shippingAddress.zipCode)")
             }
             
-            Spacer() // Push "Added to Basket" and selected products closer to the bottom
+            Spacer()
 
             // Display the items added to the basket
             Text("Added to Basket:")
@@ -58,7 +57,6 @@ struct ContinuePage: View {
                 HStack(spacing: 10) {
                     ForEach(selectedProductsInCart) { product in
                         Button(action: {
-                            // Display delete confirmation pop-up
                             showDeleteConfirmation = true
                             productToDelete = product
                         }) {
@@ -67,7 +65,7 @@ struct ContinuePage: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 100, height: 100)
-                                    .cornerRadius(15) // Apply corner radius here
+                                    .cornerRadius(15)
                                 Text(product.title)
                                     .font(.title2)
                                     .fontWeight(.semibold)
@@ -80,14 +78,12 @@ struct ContinuePage: View {
                 }
             }
             
-            Spacer() // Push the selected products closer to the bottom
+            Spacer()
         }
         .onAppear {
-            // Populate selectedProductsInCart with products from shared data
             selectedProductsInCart = sharedData.cartProducts
         }
         .onDisappear {
-            // Clear the selectedProductsInCart when leaving the view
             selectedProductsInCart.removeAll()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -100,18 +96,17 @@ struct ContinuePage: View {
                 primaryButton: .destructive(Text("Delete")) {
                     if let product = productToDelete, let index = selectedProductsInCart.firstIndex(of: product) {
                         selectedProductsInCart.remove(at: index)
-                        // Also remove the product from sharedData.cartProducts
                         if let sharedIndex = sharedData.cartProducts.firstIndex(of: product) {
                             sharedData.cartProducts.remove(at: sharedIndex)
                         }
+                        showDeleteConfirmation = false
                     }
-                    showDeleteConfirmation = false
                 },
                 secondaryButton: .cancel(Text("Cancel")) {
                     showDeleteConfirmation = false
                 }
             )
         }
+
     }
 }
-
