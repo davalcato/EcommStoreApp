@@ -17,7 +17,7 @@ struct ContinuePage: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible())], alignment: .leading, spacing: 10) {
-                ForEach(["Order Summary", "Total before Tax", "Estimated Tax", "Order Total"], id: \.self) { item in
+                ForEach(["Order Summary:", "Total before Tax:", "Estimated Tax:", "Order Total:"], id: \.self) { item in
                     Text(item)
                         .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0))
                 }
