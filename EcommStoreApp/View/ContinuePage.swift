@@ -17,9 +17,10 @@ struct ContinuePage: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible())], spacing: 20) {
-                ForEach(["Order Summary", "Items Added", "Total before Tax", "Estimated Tax", "Order Total"], id: \.self) { item in
+                ForEach(["Order Summary", "Total before Tax", "Estimated Tax", "Order Total"], id: \.self) { item in
                     Text(item)
                         .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading) // Align to the left
                 }
             }
 
