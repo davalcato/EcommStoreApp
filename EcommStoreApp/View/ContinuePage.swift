@@ -13,17 +13,26 @@ struct ContinuePage: View {
     @State private var selectedProductsInCart: [Product] = []
     @State private var showDeleteConfirmation = false
     @State private var productToDelete: Product?
+    @State private var orderTotal: Double = 0.0
 
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible())], alignment: .leading, spacing: 10) {
                 ForEach(["Order Summary:", "Total before Tax:", "Estimated Tax:", "Order Total:"], id: \.self) { item in
-                    Text(item)
+                    if item == "Order Total:" {
+                        HStack {
+                            Text(item)
+                            Spacer()
+                            Text(String(format: "$%.2f", orderTotal))
+                        }
                         .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0))
+                    } else {
+                        Text(item)
+                            .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0))
+                    }
                 }
             }
 
-            
             // Container for the "Order Summary"
             VStack {
                 // Number of items added to the basket
@@ -44,7 +53,7 @@ struct ContinuePage: View {
                 Text("State: \(shippingAddress.state)")
                 Text("ZIP Code: \(shippingAddress.zipCode)")
             }
-            
+
             Spacer()
 
             // Display the items added to the basket
@@ -77,11 +86,12 @@ struct ContinuePage: View {
                     }
                 }
             }
-            
+
             Spacer()
         }
         .onAppear {
             selectedProductsInCart = sharedData.cartProducts
+            orderTotal = calculateTotalBeforeTax()
         }
         .onDisappear {
             selectedProductsInCart.removeAll()
@@ -107,6 +117,10 @@ struct ContinuePage: View {
                 }
             )
         }
-
     }
+
+    func calculateTotalBeforeTax() -> Double {
+        return selectedProductsInCart.reduce(0.0) { $0 + (Double($1.price) ?? 0.0) }
+    }
+
 }
