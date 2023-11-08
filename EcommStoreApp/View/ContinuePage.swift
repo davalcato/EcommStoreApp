@@ -10,7 +10,6 @@ import SwiftUI
 struct ContinuePage: View {
     let shippingAddress: ShippingAddress
     @EnvironmentObject var sharedData: SharedDataModel
-    @State private var selectedProductsInCart: [Product] = []
     @State private var showDeleteConfirmation = false
     @State private var productToDelete: Product?
     @State private var orderTotal: Double = 0.0
@@ -18,8 +17,8 @@ struct ContinuePage: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible())], alignment: .leading, spacing: 10) {
-                ForEach(["Order Summary:", "Total before Tax:", "Estimated Tax:", "Order Total:"], id: \.self) { item in
-                    if item == "Order Total:" {
+                ForEach(["Item price:", "Shipping:", "Sales Tax:", "Subtotal:"], id: \.self) { item in
+                    if item == "Subtotal:" {
                         HStack {
                             Text(item)
                             Spacer()
@@ -32,11 +31,13 @@ struct ContinuePage: View {
                     }
                 }
             }
-
+            
+            Divider() // Add a divider under "Subtotal:"
+            
             // Container for the "Order Summary"
             VStack {
                 // Number of items added to the basket
-                Text("Items Added: \(selectedProductsInCart.count)")
+                Text("Items Added: \(sharedData.cartProducts.count)")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.top, -5)
@@ -52,6 +53,9 @@ struct ContinuePage: View {
                 Text("City: \(shippingAddress.city)")
                 Text("State: \(shippingAddress.state)")
                 Text("ZIP Code: \(shippingAddress.zipCode)")
+                
+                Divider() // Add a divider line below "ZIP Code"
+                    .background(Color(.systemGray4)) // Customize the divider color if needed
             }
 
             Spacer()
@@ -64,7 +68,7 @@ struct ContinuePage: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    ForEach(selectedProductsInCart) { product in
+                    ForEach(sharedData.cartProducts) { product in
                         Button(action: {
                             showDeleteConfirmation = true
                             productToDelete = product
@@ -90,11 +94,8 @@ struct ContinuePage: View {
             Spacer()
         }
         .onAppear {
-            selectedProductsInCart = sharedData.cartProducts
+            // Calculate the total before tax
             orderTotal = calculateTotalBeforeTax()
-        }
-        .onDisappear {
-            selectedProductsInCart.removeAll()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6).ignoresSafeArea())
@@ -104,23 +105,19 @@ struct ContinuePage: View {
                 title: Text("Confirm Deletion"),
                 message: Text("Are you sure you want to delete this product from your basket?"),
                 primaryButton: .destructive(Text("Delete")) {
-                    if let product = productToDelete, let index = selectedProductsInCart.firstIndex(of: product) {
-                        selectedProductsInCart.remove(at: index)
-                        if let sharedIndex = sharedData.cartProducts.firstIndex(of: product) {
-                            sharedData.cartProducts.remove(at: sharedIndex)
-                        }
-                        showDeleteConfirmation = false
+                    if let product = productToDelete, let index = sharedData.cartProducts.firstIndex(of: product) {
+                        sharedData.cartProducts.remove(at: index)
+
+                        // Recalculate the total
+                        orderTotal = calculateTotalBeforeTax()
                     }
                 },
-                secondaryButton: .cancel(Text("Cancel")) {
-                    showDeleteConfirmation = false
-                }
+                secondaryButton: .cancel(Text("Cancel"))
             )
         }
     }
 
     func calculateTotalBeforeTax() -> Double {
-        return selectedProductsInCart.reduce(0.0) { $0 + (Double($1.price) ?? 0.0) }
+        return sharedData.cartProducts.reduce(0.0) { $0 + (Double($1.price) ?? 0.0) }
     }
-
 }
