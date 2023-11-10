@@ -7,31 +7,17 @@
 
 import SwiftUI
 
-struct ShippingAddress: Codable {
-    var street: String
-    var city: String
-    var state: String
-    var zipCode: String
-}
-
 struct CheckoutPage: View {
     let subtotal: String
     @Binding var selectedPaymentMethod: PaymentMethod?
-    
-    @State private var isSaving = false
-
     @State private var shippingAddress = ShippingAddress(street: "", city: "", state: "", zipCode: "")
     @State private var promoCode: String = ""
-    @State private var savingAddress = false // Added a state for saving address
+    @State private var isSavingAddress = false
+    @State private var showAlert = false
 
     init(subtotal: String, selectedPaymentMethod: Binding<PaymentMethod?>) {
         self.subtotal = subtotal
         self._selectedPaymentMethod = selectedPaymentMethod
-
-        if let storedAddressData = UserDefaults.standard.data(forKey: "shippingAddress"),
-           let storedAddress = try? JSONDecoder().decode(ShippingAddress.self, from: storedAddressData) {
-            self._shippingAddress = State(initialValue: storedAddress)
-        }
     }
 
     var body: some View {
@@ -80,60 +66,61 @@ struct CheckoutPage: View {
                 NavigationLink(
                     destination: PaymentPage(selectedPaymentMethod: $selectedPaymentMethod, shippingAddress: $shippingAddress),
                     label: {
-                        ZStack {
-                            Text("Proceed to Payment")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .cornerRadius(15)
-
-                            if savingAddress {
-                                ActivityIndicator(title: "Saving", isAnimating: $savingAddress)
-                                    .foregroundColor(.white)
-                            }
-                        }
+                        Text("Proceed to Payment")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(15)
                     }
                 )
                 .padding(.horizontal, 20)
+                .disabled(isSavingAddress || shippingAddress.isEmpty)
                 .onTapGesture {
-                    savingAddress = true // Start saving address
                     // Save the address to UserDefaults
-                    if let addressData = try? JSONEncoder().encode(shippingAddress) {
-                        UserDefaults.standard.set(addressData, forKey: "shippingAddress")
-                    }
-                    // Stop the activity indicator after a brief delay (simulating a save operation)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        savingAddress = false
-                    }
+                    isSavingAddress = true
+                    saveAddress()
+                }
+
+                // Activity Indicator to show "Save"
+                if isSavingAddress {
+                    ProgressView("Save")
+                        .font(.title2)
+                        .foregroundColor(.blue)
+                        .padding(.top, 10)
                 }
             }
             .navigationBarHidden(true)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.systemGray6).ignoresSafeArea())
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Missing Address"),
+                    message: Text("Please enter your shipping address before proceeding."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
+    }
+
+    private func saveAddress() {
+        DispatchQueue.global().async {
+            // Simulate a delay for demonstration purposes
+            Thread.sleep(forTimeInterval: 2)
+            // Save the address to UserDefaults
+            if !shippingAddress.isEmpty {
+                if let addressData = try? JSONEncoder().encode(shippingAddress) {
+                    UserDefaults.standard.set(addressData, forKey: "shippingAddress")
+                }
+                isSavingAddress = false
+            } else {
+                showAlert = true
+                isSavingAddress = false
+            }
         }
     }
 }
 
-struct ActivityIndicator: UIViewRepresentable {
-    let title: String
-    @Binding var isAnimating: Bool
 
-    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        let indicator = UIActivityIndicatorView()
-        indicator.hidesWhenStopped = true
-        return indicator
-    }
-
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
-        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
-    }
-}
-
-struct CheckoutPage_Previews: PreviewProvider {
-    static var previews: some View {
-        CheckoutPage(subtotal: "100.00", selectedPaymentMethod: .constant(nil))
-    }
-}

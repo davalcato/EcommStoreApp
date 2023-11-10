@@ -14,6 +14,7 @@
 		7509B6602ADA26F7001854F7 /* ConfirmationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509B65F2ADA26F7001854F7 /* ConfirmationPage.swift */; };
 		7509B6622ADB06B3001854F7 /* PaymentMethodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509B6612ADB06B3001854F7 /* PaymentMethodView.swift */; };
 		7509B6642ADF506E001854F7 /* ContinuePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509B6632ADF506E001854F7 /* ContinuePage.swift */; };
+		7561D7692AFEB423006F9919 /* ShippingAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7561D7682AFEB423006F9919 /* ShippingAddress.swift */; };
 		758905C92A75D77800BD6E2A /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758905C82A75D77800BD6E2A /* LoginState.swift */; };
 		758905CB2A76E7E900BD6E2A /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758905CA2A76E7E800BD6E2A /* AppCoordinator.swift */; };
 		758C8B342A575F0300A52C66 /* EcommStoreAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758C8B332A575F0300A52C66 /* EcommStoreAppApp.swift */; };
@@ -71,6 +72,7 @@
 		7509B65F2ADA26F7001854F7 /* ConfirmationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationPage.swift; sourceTree = "<group>"; };
 		7509B6612ADB06B3001854F7 /* PaymentMethodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodView.swift; sourceTree = "<group>"; };
 		7509B6632ADF506E001854F7 /* ContinuePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinuePage.swift; sourceTree = "<group>"; };
+		7561D7682AFEB423006F9919 /* ShippingAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShippingAddress.swift; sourceTree = "<group>"; };
 		758905C82A75D77800BD6E2A /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		758905CA2A76E7E800BD6E2A /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		758C8B302A575F0300A52C66 /* EcommStoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EcommStoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,6 +232,7 @@
 				758C8B602A576C8100A52C66 /* TabViews */,
 				758C8B712A576F1B00A52C66 /* OnBoardingPage.swift */,
 				7509B65B2ADA186C001854F7 /* CheckoutPage.swift */,
+				7561D7682AFEB423006F9919 /* ShippingAddress.swift */,
 				7509B65D2ADA1EF3001854F7 /* PaymentPage.swift */,
 				7509B6612ADB06B3001854F7 /* PaymentMethodView.swift */,
 				7509B65F2ADA26F7001854F7 /* ConfirmationPage.swift */,
@@ -515,6 +518,7 @@
 				7509B65E2ADA1EF3001854F7 /* PaymentPage.swift in Sources */,
 				758C8B702A576EE700A52C66 /* CartPage.swift in Sources */,
 				758C8B342A575F0300A52C66 /* EcommStoreAppApp.swift in Sources */,
+				7561D7692AFEB423006F9919 /* ShippingAddress.swift in Sources */,
 				758C8B7C2A57705C00A52C66 /* StaggeredGrid.swift in Sources */,
 				758905C92A75D77800BD6E2A /* LoginState.swift in Sources */,
 				758905CB2A76E7E900BD6E2A /* AppCoordinator.swift in Sources */,
