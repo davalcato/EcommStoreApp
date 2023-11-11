@@ -16,7 +16,7 @@ struct ShippingAddress: Codable {
     var zipCode: String
 
     var isEmpty: Bool {
-        return street.isEmpty && city.isEmpty && state.isEmpty && zipCode.isEmpty
+        return street.isEmpty || city.isEmpty || state.isEmpty || zipCode.isEmpty
     }
 }
 

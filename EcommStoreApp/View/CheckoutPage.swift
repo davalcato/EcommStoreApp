@@ -14,6 +14,7 @@ struct CheckoutPage: View {
     @State private var promoCode: String = ""
     @State private var isSavingAddress = false
     @State private var showAlert = false
+    
 
     init(subtotal: String, selectedPaymentMethod: Binding<PaymentMethod?>) {
         self.subtotal = subtotal
