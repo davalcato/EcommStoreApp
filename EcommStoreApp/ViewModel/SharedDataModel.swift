@@ -8,6 +8,7 @@
 import SwiftUI
 
 class SharedDataModel: ObservableObject {
+    @Published var selectedPaymentMethod: PaymentMethod?
     
     //Detail Product Data
     @Published var detailProduct: Product?

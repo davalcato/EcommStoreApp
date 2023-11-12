@@ -13,6 +13,7 @@ struct ContinuePage: View {
     @State private var showDeleteConfirmation = false
     @State private var productToDelete: Product?
     @State private var orderTotal: Double = 0.0
+    
 
     var body: some View {
         ScrollView {
