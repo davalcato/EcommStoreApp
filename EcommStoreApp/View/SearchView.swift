@@ -169,7 +169,7 @@ struct SearchView: View {
                 .foregroundColor(.gray)
                 .fontWeight(.semibold)
             
-            Text(products.price)
+            Text(String(products.price))
                 .font(.system(size: 16))
                 .fontWeight(.bold)
                 .foregroundColor(Color("black"))
