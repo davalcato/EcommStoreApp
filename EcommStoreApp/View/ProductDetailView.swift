@@ -86,9 +86,9 @@ struct ProductDetailView: View {
                         
                         Spacer()
                         
-                        Text("\(product.price)")
-                            .font(.system(size: 20).bold())
-                            .foregroundColor(Color("black"))
+                        Text(String(format: "$%.2f", product.price))
+                                .font(.system(size: 20).bold())
+                                .foregroundColor(Color("black"))
                     }
                     .padding(.vertical, 20)
                     
