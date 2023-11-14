@@ -11,14 +11,14 @@ import KeychainSwift
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
     @EnvironmentObject private var loginState: LoginState // Use the LoginState object
-    
-        @State private var draggedOffset: CGSize = .zero
-        @Binding var showLoginPage: Bool
-        @State private var navigateToMainPage: Bool = false
-        @State private var showErrorAlert: Bool = false
 
-        // Add this variable for dragging offset
-        @GestureState private var dragState = CGSize.zero
+    @State private var draggedOffset: CGSize = .zero
+    @Binding var showLoginPage: Bool
+    @State private var navigateToMainPage: Bool = false
+    @State private var showErrorAlert: Bool = false
+
+    // Add this variable for dragging offset
+    @GestureState private var dragState = CGSize.zero
 
     // Constants
     private let gradientColors = [
@@ -69,6 +69,22 @@ struct LoginPage: View {
                             .padding(.trailing)
                             .offset(y: -25)
                             .ignoresSafeArea()
+
+                        Button {
+                            // Handle the tap action here
+                            // For example, you can open a URL or perform some other action
+                            print("Google button tapped")
+                        } label: {
+                            Image("Google")  // Replace "Google" with your actual image name
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 40, height: 40)
+                                .offset(y: 95)
+                                .padding(.trailing, 30)  // Adjust padding as needed
+                                .onTapGesture {
+                                    print("Google button tapped")
+                                }
+                        }
 
                         Circle()
                             .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
@@ -218,6 +234,7 @@ struct LoginPage: View {
         }
     }
 }
+
 
 @ViewBuilder
 func CustomTextField(icon: String, title: String, hint: String, value: Binding<String>, showPassword: Binding<Bool>) -> some View {
