@@ -57,7 +57,7 @@ struct LoginPage: View {
                 .font(.system(size: 55).lowercaseSmallCaps()).bold()
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: getRect().height / 3.5)
+                .frame(height: UIScreen.main.bounds.height / 3.5)
                 .padding()
                 .background(
                     ZStack {
@@ -70,21 +70,18 @@ struct LoginPage: View {
                             .offset(y: -25)
                             .ignoresSafeArea()
 
-                        Button {
-                            // Handle the tap action here
-                            // For example, you can open a URL or perform some other action
+                    Image("Google")  // Replace "Google" with your actual image name
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40, height: 40)
+                        .offset(y: 95)
+                        .padding(.trailing, 30)  // Adjust padding as needed
+                        .scaleEffect(isPressed ? 0.9 : 1.0)
+                        .onTapGesture {
+                            isPressed.toggle()
                             print("Google button tapped")
-                        } label: {
-                            Image("Google")  // Replace "Google" with your actual image name
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 40, height: 40)
-                                .offset(y: 95)
-                                .padding(.trailing, 30)  // Adjust padding as needed
-                                .onTapGesture {
-                                    print("Google button tapped")
-                                }
                         }
+                        .animation(.easeInOut(duration: 0.1))
 
                         Circle()
                             .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
@@ -233,6 +230,7 @@ struct LoginPage: View {
             MainPage()
         }
     }
+    @State private var isPressed: Bool = false
 }
 
 
