@@ -8,6 +8,7 @@
 import SwiftUI
 import KeychainSwift
 
+
 struct LoginPage: View {
     @StateObject var loginData: LoginPageModel = LoginPageModel()
     @EnvironmentObject private var loginState: LoginState // Use the LoginState object
@@ -16,6 +17,8 @@ struct LoginPage: View {
     @Binding var showLoginPage: Bool
     @State private var navigateToMainPage: Bool = false
     @State private var showErrorAlert: Bool = false
+    @State private var isGooglePressed: Bool = false
+    @State private var isFacebookPressed: Bool = false
 
     // Add this variable for dragging offset
     @GestureState private var dragState = CGSize.zero
@@ -70,19 +73,35 @@ struct LoginPage: View {
                             .offset(y: -25)
                             .ignoresSafeArea()
 
-                    Image("Google")  // Replace "Google" with your actual image name
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 40, height: 40)
-                        .offset(y: 95)
-                        .padding(.trailing, 30)  // Adjust padding as needed
-                        .opacity(isPressed ? 0.7 : 1.0)
-                        .scaleEffect(isPressed ? 0.9 : 1.0)
-                        .onTapGesture {
-                            isPressed.toggle()
-                            print("Google button tapped")
-                        }
-                        .animation(.easeInOut(duration: 0.1))
+                        // Facebook Button
+                        Image("Facebook") // Replace "facebook" with the actual image name
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40, height: 40)
+                            .offset(y: 95)
+                            .padding(.trailing, -39)  // Adjust padding as needed
+                            .opacity(isFacebookPressed ? 0.7 : 1.0)
+                            .scaleEffect(isFacebookPressed ? 0.9 : 1.0)
+                            .onTapGesture {
+                                isFacebookPressed.toggle()
+                                print("Facebook button tapped")
+                            }
+                            .animation(.easeInOut(duration: 0.1))
+
+                        // Google Button
+                        Image("Google")  // Replace "Google" with your actual image name
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40, height: 40)
+                            .offset(y: 95)
+                            .padding(.trailing, 110)  // Adjust padding as needed
+                            .opacity(isGooglePressed ? 0.7 : 1.0)
+                            .scaleEffect(isGooglePressed ? 0.9 : 1.0)
+                            .onTapGesture {
+                                isGooglePressed.toggle()
+                                print("Google button tapped")
+                            }
+                            .animation(.easeInOut(duration: 0.1))
 
                         Circle()
                             .strokeBorder(Color.white.opacity(0.3),lineWidth: 3)
@@ -231,8 +250,9 @@ struct LoginPage: View {
             MainPage()
         }
     }
-    @State private var isPressed: Bool = false
 }
+
+
 
 
 @ViewBuilder
