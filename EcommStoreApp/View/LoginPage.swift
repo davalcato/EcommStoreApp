@@ -76,6 +76,7 @@ struct LoginPage: View {
                         .frame(width: 40, height: 40)
                         .offset(y: 95)
                         .padding(.trailing, 30)  // Adjust padding as needed
+                        .opacity(isPressed ? 0.7 : 1.0)
                         .scaleEffect(isPressed ? 0.9 : 1.0)
                         .onTapGesture {
                             isPressed.toggle()

@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @AppStorage("log_Status") var log_Status: Bool = false
     @EnvironmentObject var sharedData: SharedDataModel
+    
 
     var body: some View {
         Group {
